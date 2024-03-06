@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,7 +59,6 @@ fun WearApp() {
             Column {
                 Greeting()
                 Button(
-                    onClick = { /* Faça algo quando o botão for clicado */ },
                     text = "Buscar"
                 )
             }
@@ -72,7 +72,7 @@ fun Greeting() {
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(15.dp),
         textAlign = TextAlign.Center,
         color = MaterialTheme.colors.primary,
         text = stringResource(R.string.title)
@@ -81,12 +81,15 @@ fun Greeting() {
 
 @Composable
 fun Button(
-    onClick: () -> Unit,
-    text: String,
+    text: String
 ) {
     Button(
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        onClick = {
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .size(50.dp)
+            .padding(start = 30.dp, end = 30.dp),
     ) {
         Text(text)
     }
