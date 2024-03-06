@@ -63,6 +63,7 @@ dependencies {
     implementation("com.google.android.horologist:horologist-compose-tools:0.4.8")
     implementation("com.google.android.horologist:horologist-tiles:0.4.8")
     implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.2.1")
+    implementation("androidx.wear.compose:compose-navigation:1.3.0")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
