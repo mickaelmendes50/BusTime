@@ -98,7 +98,7 @@ fun Button() {
             .setLabel(stringResource(id = R.string.edit_user_input))
             .wearableExtender {
                 setEmojisAllowed(false)
-                setInputActionType(EditorInfo.IME_ACTION_DONE)
+                setInputActionType(EditorInfo.IME_ACTION_SEARCH)
             }.build()
     )
 
@@ -107,8 +107,7 @@ fun Button() {
     ) {
         it.data?.let { data ->
             val results: Bundle = RemoteInput.getResultsFromIntent(data)
-            val newInputText: CharSequence? = results.getCharSequence(inputTextKey)
-            userInput = newInputText?.toString() ?: ""
+            userInput = results.getCharSequence(inputTextKey).toString()
         }
     }
 
