@@ -1,4 +1,5 @@
 <resources>
-    <string name="hello_world">From the Round world,\nHello, %1$s!</string>
     <string name="title">Horário do Ônibus</string>
+    <string name="search_button">Buscar</string>
+    <string name="edit_user_input">Informe o número do ponto</string>
 </resources>
