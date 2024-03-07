@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
@@ -41,6 +42,7 @@ import androidx.wear.compose.material.TimeText
 import androidx.wear.input.RemoteInputIntentHelper
 import androidx.wear.input.wearableExtender
 import co.mesquita.labs.bustime.R
+import co.mesquita.labs.bustime.model.BussModel
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
 
 class MainActivity : ComponentActivity() {
@@ -108,6 +110,8 @@ fun Button() {
         it.data?.let { data ->
             val results: Bundle = RemoteInput.getResultsFromIntent(data)
             userInput = results.getCharSequence(inputTextKey).toString()
+//            val bussModel: BussModel =
+//                viewModel(factory = BussModel.Factory)
         }
     }
 
