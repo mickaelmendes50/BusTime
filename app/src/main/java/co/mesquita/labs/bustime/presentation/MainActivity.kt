@@ -6,15 +6,10 @@
 
 package co.mesquita.labs.bustime.presentation
 
-import android.app.RemoteInput
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.inputmethod.EditorInfo
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -36,18 +31,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
-import androidx.wear.input.RemoteInputIntentHelper
-import androidx.wear.input.wearableExtender
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
@@ -55,92 +49,97 @@ import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
 var busStop = mutableStateOf("")
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var viewModel: BusViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
 
         setTheme(android.R.style.Theme_DeviceDefault)
+        //this.viewModel = ViewModelProvider(this)[co.mesquita.labs.bustime.model.BusViewModel::class.java]
 
         setContent {
             WearApp()
         }
-
-        Log.d("test", busStop.value)
     }
-}
 
-@Composable
-fun WearApp() {
-    BusTimeGoianiaTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-            contentAlignment = Alignment.Center
-        ) {
-            TimeText()
-            Column {
-                Greeting()
-                StopBusTextField()
-                Button()
+    @Composable
+    fun WearApp() {
+        BusTimeGoianiaTheme {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.background),
+                contentAlignment = Alignment.Center
+            ) {
+                TimeText()
+                Column {
+                    Greeting()
+                    StopBusTextField()
+                    Button()
+                }
+
             }
-
         }
     }
-}
 
-@Composable
-fun StopBusTextField() {
-    var text by remember { mutableStateOf("") }
-    OutlinedTextField(
-        value = text,
-        onValueChange = {
-            text = it
-            busStop.value = it
-            Log.d("test", it)
-        },
-        modifier = Modifier
-            .padding(horizontal = 20.dp)
-            .padding(bottom = 15.dp)
-            .height(15.dp)
-            .background(Color.Black),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        shape = CircleShape,
-    )
-}
-
-@Composable
-fun Greeting() {
-    Text(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(15.dp),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.title)
-    )
-}
-
-@Composable
-fun Button() {
-    //val viewModel: BusViewModel = viewModel()
-
-    Button(
-        onClick = {
-            //
-        },                
-        modifier = Modifier
-            .fillMaxWidth()
-            .size(50.dp)
-            .padding(start = 30.dp, end = 30.dp),
-    ) {
-        Text(stringResource(id = R.string.search_button))
+    @Composable
+    fun StopBusTextField() {
+        var text by remember { mutableStateOf("") }
+        OutlinedTextField(
+            value = text,
+            onValueChange = {
+                text = it
+                busStop.value = it
+            },
+            textStyle = TextStyle(color = Color.Blue),
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 15.dp)
+                .height(15.dp)
+                .background(Color.Black),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            shape = CircleShape,
+        )
     }
-}
 
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp()
+    @Composable
+    fun Greeting() {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp),
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colors.primary,
+            text = stringResource(R.string.title)
+        )
+    }
+
+    @Composable
+    fun Button(
+//        viewModel: BusViewModel = viewModel()
+    ) {
+        //val viewModel: BusViewModel = viewModel()
+        //this.viewModel.getBussTime("1234")
+
+        Button(
+            onClick = {
+                Log.d("test", busStop.value)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .size(50.dp)
+                .padding(start = 30.dp, end = 30.dp),
+        ) {
+            Text(stringResource(id = R.string.search_button))
+        }
+    }
+
+    @Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
+    @Composable
+    fun DefaultPreview() {
+        WearApp()
+    }
 }
