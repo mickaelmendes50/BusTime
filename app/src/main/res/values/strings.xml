@@ -9,4 +9,5 @@
     <string name="title">Horário do Ônibus</string>
     <string name="search_button">Buscar</string>
     <string name="edit_user_input">Informe o número do ponto</string>
+    <string name="text_field_label">Número do ponto</string>
 </resources>

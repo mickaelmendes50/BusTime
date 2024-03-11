@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -85,6 +87,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun StopBusTextField() {
         var text by remember { mutableStateOf("") }
@@ -94,12 +97,23 @@ class MainActivity : ComponentActivity() {
                 text = it
                 busStop.value = it
             },
-            textStyle = TextStyle(color = Color.Blue),
+            label = {
+                Text(
+                    text = stringResource(
+                        id = R.string.text_field_label
+                    ),
+                    style = TextStyle(
+                        color = Color.Gray,
+                    )
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = MaterialTheme.colors.primary,
+            ),
+            textStyle = TextStyle(color = Color.White),
             modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .padding(bottom = 15.dp)
-                .height(15.dp)
-                .background(Color.Black),
+                .padding(horizontal = 15.dp)
+                .padding(bottom = 15.dp),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             shape = CircleShape,
         )
@@ -130,8 +144,8 @@ class MainActivity : ComponentActivity() {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .size(50.dp)
-                .padding(start = 30.dp, end = 30.dp),
+                .size(35.dp)
+                .padding(horizontal = 70.dp),
         ) {
             Text(stringResource(id = R.string.search_button))
         }
