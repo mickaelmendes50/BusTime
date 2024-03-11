@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -50,12 +51,14 @@ import androidx.wear.compose.material.TimeText
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-var busStop = mutableStateOf("")
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var viewModel: BusViewModel
+    private val busStop = mutableStateOf("")
+    val viewModel: BusViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -63,6 +66,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setTheme(android.R.style.Theme_DeviceDefault)
+
         //this.viewModel = ViewModelProvider(this)[co.mesquita.labs.bustime.model.BusViewModel::class.java]
 
         setContent {

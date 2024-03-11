@@ -5,10 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.mesquita.labs.bustime.repository.BusRepository
 import co.mesquita.labs.bustime.repository.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BusViewModel(
+@HiltViewModel
+class BusViewModel @Inject constructor(
     private val busRepository: BusRepository
 ): ViewModel() {
     private lateinit var result: Result<Boolean>
