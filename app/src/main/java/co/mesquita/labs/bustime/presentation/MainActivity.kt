@@ -9,6 +9,7 @@ package co.mesquita.labs.bustime.presentation
 import android.app.RemoteInput
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
@@ -42,8 +44,10 @@ import androidx.wear.compose.material.TimeText
 import androidx.wear.input.RemoteInputIntentHelper
 import androidx.wear.input.wearableExtender
 import co.mesquita.labs.bustime.R
-import co.mesquita.labs.bustime.model.BussModel
+import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
+
+var x = ""
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +60,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             WearApp()
         }
+
+        Log.d("test", x)
     }
 }
 
@@ -92,6 +98,7 @@ fun Greeting() {
 
 @Composable
 fun Button() {
+    //val viewModel: BusViewModel = viewModel()
     val defaultText = stringResource(R.string.edit_user_input)
     var userInput by remember { mutableStateOf(defaultText) }
     val inputTextKey = "input_text"
@@ -110,8 +117,8 @@ fun Button() {
         it.data?.let { data ->
             val results: Bundle = RemoteInput.getResultsFromIntent(data)
             userInput = results.getCharSequence(inputTextKey).toString()
-//            val bussModel: BussModel =
-//                viewModel(factory = BussModel.Factory)
+            x = userInput
+            //viewModel.getBussTime(userInput)
         }
     }
 
