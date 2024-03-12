@@ -10,4 +10,5 @@
     <string name="search_button">Buscar</string>
     <string name="edit_user_input">Informe o número do ponto</string>
     <string name="text_field_label">Número do ponto</string>
+    <string name="title_activity_bus_time_table">BusTimeTable</string>
 </resources>
