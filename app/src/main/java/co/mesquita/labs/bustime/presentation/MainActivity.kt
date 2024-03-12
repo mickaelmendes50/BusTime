@@ -7,7 +7,6 @@
 package co.mesquita.labs.bustime.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -40,10 +38,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
@@ -52,15 +48,12 @@ import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel: BusViewModel by viewModels()
-
     private val busStop = mutableStateOf("")
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -72,6 +65,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             WearApp()
         }
+    }
+
+    private fun onSearchButtonClick() {
+        this.viewModel.getBussTime(busStop.value)
     }
 
     @Composable
@@ -143,11 +140,9 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun Button() {
-        this.viewModel.getBussTime("1234")
-
         Button(
             onClick = {
-                Log.d("test", busStop.value)
+                onSearchButtonClick()
             },
             modifier = Modifier
                 .fillMaxWidth()

@@ -12,7 +12,7 @@ import javax.inject.Singleton
 class AppModule {
     @Singleton
     @Provides
-    fun  provideBusRepository() : BusRepository {
+    fun provideBusRepository() : BusRepository {
         return BusRepository()
     }
 }
