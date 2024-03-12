@@ -18,7 +18,7 @@ class BusViewModel @Inject constructor(
     fun getBussTime(busStop: String) {
         viewModelScope.launch(Dispatchers.IO) {
             result = busRepository.getBusTime(busStop)
-            Log.d("test", "entrei no model")
+            Log.d("test", result.toString())
         }
     }
 }

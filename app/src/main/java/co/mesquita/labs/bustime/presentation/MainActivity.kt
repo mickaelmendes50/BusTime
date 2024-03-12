@@ -57,8 +57,10 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val viewModel: BusViewModel by viewModels()
+
     private val busStop = mutableStateOf("")
-    val viewModel: BusViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -66,8 +68,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setTheme(android.R.style.Theme_DeviceDefault)
-
-        //this.viewModel = ViewModelProvider(this)[co.mesquita.labs.bustime.model.BusViewModel::class.java]
 
         setContent {
             WearApp()
@@ -142,11 +142,8 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun Button(
-//        viewModel: BusViewModel = viewModel()
-    ) {
-        //val viewModel: BusViewModel = viewModel()
-        //this.viewModel.getBussTime("1234")
+    fun Button() {
+        this.viewModel.getBussTime("1234")
 
         Button(
             onClick = {
