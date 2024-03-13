@@ -12,4 +12,5 @@
     <string name="text_field_label">Número do ponto</string>
     <string name="title_activity_bus_time_table">BusTimeTable</string>
     <string name="title_table">Linhas</string>
+    <string name="empty_table">Ponto não encontrado</string>
 </resources>
