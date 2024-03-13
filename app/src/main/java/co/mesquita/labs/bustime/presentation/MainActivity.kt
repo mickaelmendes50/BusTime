@@ -6,8 +6,8 @@
 
 package co.mesquita.labs.bustime.presentation
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -45,6 +45,7 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
+import co.mesquita.labs.bustime.Constants.EXTRA_RESULT
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
@@ -70,7 +71,9 @@ class MainActivity : ComponentActivity() {
 
     private fun onSearchButtonClick() {
         this.viewModel.getBussTime(busStop.value).observe(this) {
-            Log.d("test", it)
+            val intent = Intent(this, BusTimeTable::class.java)
+            intent.putExtra(EXTRA_RESULT, it)
+            startActivity(intent)
         }
     }
 

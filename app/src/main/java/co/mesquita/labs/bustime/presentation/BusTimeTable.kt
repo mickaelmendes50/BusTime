@@ -1,6 +1,7 @@
 package co.mesquita.labs.bustime.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,11 +12,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import co.mesquita.labs.bustime.Constants
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
 
 class BusTimeTable : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val intent = intent
+
+        if (intent.hasExtra(Constants.EXTRA_RESULT)) {
+            val result = intent.getStringExtra(Constants.EXTRA_RESULT)
+            Log.d("test", result.toString())
+        }
+
         setContent {
             BusTimeGoianiaTheme {
                 // A surface container using the 'background' color from the theme
