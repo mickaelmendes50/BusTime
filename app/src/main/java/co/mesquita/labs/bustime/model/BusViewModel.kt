@@ -1,6 +1,7 @@
 package co.mesquita.labs.bustime.model
 
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.mesquita.labs.bustime.repository.BusRepository
@@ -14,10 +15,12 @@ class BusViewModel @Inject constructor(
     private val busRepository: BusRepository
 ): ViewModel() {
 
-    fun getBussTime(busStop: String) {
+    fun getBussTime(busStop: String): LiveData<String> {
+        val resultLiveData = MutableLiveData<String>()
         viewModelScope.launch(Dispatchers.IO) {
             val result = busRepository.getBusTime(busStop)
-            Log.d("test", result)
+            resultLiveData.postValue(result)
         }
+        return resultLiveData
     }
 }

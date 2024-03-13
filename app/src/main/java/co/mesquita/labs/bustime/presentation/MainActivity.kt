@@ -7,6 +7,7 @@
 package co.mesquita.labs.bustime.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -68,7 +69,9 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun onSearchButtonClick() {
-        this.viewModel.getBussTime(busStop.value)
+        this.viewModel.getBussTime(busStop.value).observe(this) {
+            Log.d("test", it)
+        }
     }
 
     @Composable
@@ -97,9 +100,10 @@ class MainActivity : ComponentActivity() {
         var text by remember { mutableStateOf("") }
         OutlinedTextField(
             value = text,
-            onValueChange = {
-                text = it
-                busStop.value = it
+            onValueChange = { it ->
+                val filteredText = it.filter { !it.isWhitespace() && it != '\n' }
+                text = filteredText
+                busStop.value = filteredText
             },
             label = {
                 Text(
