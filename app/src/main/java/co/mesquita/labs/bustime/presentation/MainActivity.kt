@@ -92,7 +92,6 @@ class MainActivity : ComponentActivity() {
                     StopBusTextField()
                     Button()
                 }
-
             }
         }
     }
