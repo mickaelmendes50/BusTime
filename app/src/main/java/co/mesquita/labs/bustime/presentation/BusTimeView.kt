@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,11 +30,16 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.foundation.lazy.AutoCenteringParams
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.PositionIndicator
+import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.TimeText
+import androidx.wear.compose.material.Vignette
+import androidx.wear.compose.material.VignettePosition
 import co.mesquita.labs.bustime.Constants
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
@@ -55,7 +62,7 @@ class BusTimeTable : ComponentActivity() {
             }
         } else {
             setContent {
-                ShowTable(document)
+                ShowTable(document, busStop.value)
             }
         }
     }
@@ -81,45 +88,61 @@ fun TableHeader(
 }
 
 @Composable
-fun ShowTable(document: Document) {
+fun ShowTable(document: Document, busStop: String) {
     BusTimeGoianiaTheme {
         val listState = rememberScalingLazyListState()
 
-        ScalingLazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = listState
-        ) {
-            item {
+        Scaffold(
+            timeText = {
                 TimeText()
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Greeting()
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.Gray),
+            },
+            vignette = {
+                Vignette(vignettePosition = VignettePosition.TopAndBottom)
+            },
+            positionIndicator = {
+                PositionIndicator(
+                    scalingLazyListState = listState
+                )
+            }
+        ) {
+            ScalingLazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                reverseLayout = true,
+                state = listState
+            ) {
+                item {
+                    //TimeText()
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        TableHeader(text = "Linha", textColor = Color.White)
-                        TableHeader(text = "Próximo", textColor = Color.White)
-                        TableHeader(text = "Seguinte", textColor = Color.White)
-                    }
-                    val timeTable = document.select("table.horariosRmtc")
-                    for (line in timeTable.select("tr.linha").drop(1)) {
-                        val columns = line.select("td.coluna")
-                        val busNumber = columns[0].text()
-                        Log.d("test", busNumber.toString())
-                        val nextTime = columns[2].text()
-                        val anotherNext = columns[3].text()
-
+                        Greeting(busStop)
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
+                                .fillMaxWidth()
+                                .background(Color.Gray),
                         ) {
-                            TableHeader(text = busNumber, textColor = Color.White)
-                            TableHeader(text = nextTime, textColor = Color.White)
-                            TableHeader(text = anotherNext, textColor = Color.White)
+                            TableHeader(text = "Linha", textColor = Color.White)
+                            TableHeader(text = "Próximo", textColor = Color.White)
+                            TableHeader(text = "Seguinte", textColor = Color.White)
+                        }
+                        val timeTable = document.select("table.horariosRmtc")
+                        for (line in timeTable.select("tr.linha").drop(1)) {
+                            val columns = line.select("td.coluna")
+                            val busNumber = columns[0].text()
+                            Log.d("test", busNumber.toString())
+                            val nextTime = columns[2].text()
+                            val anotherNext = columns[3].text()
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                TableHeader(text = busNumber, textColor = Color.White)
+                                TableHeader(text = nextTime, textColor = Color.White)
+                                TableHeader(text = anotherNext, textColor = Color.White)
+                            }
                         }
                     }
                 }
@@ -162,7 +185,7 @@ fun EmptyTable() {
 }
 
 @Composable
-fun Greeting() {
+fun Greeting(busStop: String) {
     Text(
         modifier = Modifier
             .fillMaxWidth()
@@ -172,7 +195,7 @@ fun Greeting() {
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
         color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.title_table)
+        text = stringResource(R.string.title_table, busStop)
     )
 }
 
@@ -187,7 +210,6 @@ fun GreetingPreview() {
             contentAlignment = Alignment.Center
         ) {
             TimeText()
-            Greeting()
         }
     }
 }
