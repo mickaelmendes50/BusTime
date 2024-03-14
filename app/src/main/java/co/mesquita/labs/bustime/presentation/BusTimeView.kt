@@ -142,7 +142,7 @@ fun ShowTable(document: Document, busStop: String) {
                                             Text(
                                                 fontSize = 8.sp,
                                                 color = MaterialTheme.colors.onSurfaceVariant,
-                                                text = "LINHA",
+                                                text = stringResource(R.string.table_line),
                                             )
                                         }
                                         Column(
@@ -156,7 +156,7 @@ fun ShowTable(document: Document, busStop: String) {
                                             Text(
                                                 fontSize = 8.sp,
                                                 color = MaterialTheme.colors.onSurfaceVariant,
-                                                text = "PRÓX.",
+                                                text = stringResource(R.string.table_next),
                                             )
                                         }
                                         Column(
@@ -170,14 +170,11 @@ fun ShowTable(document: Document, busStop: String) {
                                             Text(
                                                 fontSize = 8.sp,
                                                 color = MaterialTheme.colors.onSurfaceVariant,
-                                                text = "SEG.",
+                                                text = stringResource(R.string.table_another_next),
                                             )
                                         }
-
                                     }
                                 }
-
-
                             },
                             colors = ChipDefaults.primaryChipColors(backgroundColor = MaterialTheme.colors.surface),
                             enabled = false,
