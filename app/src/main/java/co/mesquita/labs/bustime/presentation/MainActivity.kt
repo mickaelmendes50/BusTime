@@ -14,6 +14,8 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -44,9 +46,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
+import androidx.wear.protolayout.material.CircularProgressIndicator
 import co.mesquita.labs.bustime.Constants.EXTRA_RESULT
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.model.BusViewModel
@@ -155,22 +159,27 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun Button() {
+        val isLoading by viewModel.isLoading
         Button(
             onClick = {
                 onSearchButtonClick()
             },
+            enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .size(35.dp)
                 .padding(horizontal = 70.dp),
         ) {
-            Text(stringResource(id = R.string.search_button))
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(5.dp)
+                        .aspectRatio(1f)
+                )
+            } else {
+                Text(stringResource(id = R.string.search_button))
+            }
         }
-    }
-
-    @Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-    @Composable
-    fun DefaultPreview() {
-        WearApp()
     }
 }
