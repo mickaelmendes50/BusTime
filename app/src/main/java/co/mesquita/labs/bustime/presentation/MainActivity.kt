@@ -11,7 +11,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,7 +30,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
@@ -100,6 +102,8 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun StopBusTextField() {
         var text by remember { mutableStateOf("") }
+        val focusManager = LocalFocusManager.current
+
         OutlinedTextField(
             value = text,
             onValueChange = { it ->
@@ -123,7 +127,12 @@ class MainActivity : ComponentActivity() {
             textStyle = TextStyle(color = Color.White),
             modifier = Modifier
                 .padding(horizontal = 15.dp)
-                .padding(bottom = 15.dp),
+                .padding(bottom = 15.dp)
+                .onFocusChanged { focusState ->
+                    if (!focusState.isFocused) {
+                        focusManager.clearFocus()
+                    }
+                },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             shape = CircleShape,
         )
