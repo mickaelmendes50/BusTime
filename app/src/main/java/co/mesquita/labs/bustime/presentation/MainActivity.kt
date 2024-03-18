@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,8 +42,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.Chip
-import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
@@ -53,6 +50,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import co.mesquita.labs.bustime.R
+import co.mesquita.labs.bustime.components.busChip
 import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
@@ -187,76 +185,12 @@ class MainActivity : ComponentActivity() {
                                     anotherNext = anotherNext
                                         .replace(Regex("(\\d+) Aprox\\."), "$1\\?")
 
-                                    item {
-                                        Chip(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            label = {
-                                                Column {
-                                                    Text(
-                                                        modifier = Modifier
-                                                            .fillMaxWidth()
-                                                            .padding(bottom = 8.dp),
-                                                        textAlign = TextAlign.Center,
-                                                        fontSize = 8.sp,
-                                                        color = MaterialTheme.colors.onSurfaceVariant,
-                                                        text = destiny,
-                                                    )
-                                                    Row(
-                                                        modifier = Modifier
-                                                            .fillMaxWidth()
-                                                            .padding(horizontal = 8.dp)
-                                                            .padding(bottom = 8.dp),
-                                                        horizontalArrangement = Arrangement.SpaceBetween
-                                                    ) {
-                                                        Column(
-                                                            horizontalAlignment = Alignment.CenterHorizontally
-                                                        ) {
-                                                            androidx.compose.material3.Text(
-                                                                fontWeight = FontWeight.Bold,
-                                                                fontSize = 17.sp,
-                                                                color = MaterialTheme.colors.primary,
-                                                                text = busNumber,
-                                                            )
-                                                            androidx.compose.material3.Text(
-                                                                fontSize = 8.sp,
-                                                                color = MaterialTheme.colors.onSurfaceVariant,
-                                                                text = stringResource(R.string.table_line),
-                                                            )
-                                                        }
-                                                        Column(
-                                                            horizontalAlignment = Alignment.CenterHorizontally
-                                                        ) {
-                                                            androidx.compose.material3.Text(
-                                                                fontSize = 17.sp,
-                                                                color = MaterialTheme.colors.onSurface,
-                                                                text = nextTime,
-                                                            )
-                                                            androidx.compose.material3.Text(
-                                                                fontSize = 8.sp,
-                                                                color = MaterialTheme.colors.onSurfaceVariant,
-                                                                text = stringResource(R.string.table_next),
-                                                            )
-                                                        }
-                                                        Column(
-                                                            horizontalAlignment = Alignment.CenterHorizontally
-                                                        ) {
-                                                            androidx.compose.material3.Text(
-                                                                fontSize = 17.sp,
-                                                                color = MaterialTheme.colors.secondary,
-                                                                text = anotherNext,
-                                                            )
-                                                            androidx.compose.material3.Text(
-                                                                fontSize = 8.sp,
-                                                                color = MaterialTheme.colors.onSurfaceVariant,
-                                                                text = stringResource(R.string.table_another_next),
-                                                            )
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            colors = ChipDefaults.primaryChipColors(backgroundColor = MaterialTheme.colors.surface),
-                                            enabled = false,
-                                            onClick = { /*TODO*/ }
+                                    item { 
+                                        busChip(
+                                            destiny = destiny,
+                                            busNumber = busNumber,
+                                            nextTime = nextTime,
+                                            anotherNext = anotherNext
                                         )
                                     }
                                 }
