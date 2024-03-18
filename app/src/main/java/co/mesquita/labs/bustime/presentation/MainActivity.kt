@@ -1,17 +1,11 @@
-/* While this template provides a good starting point for using Wear Compose, you can always
- * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter and
- * https://github.com/android/wear-os-samples/tree/main/ComposeAdvanced to find the most up to date
- * changes to the libraries and their usages.
- */
-
 package co.mesquita.labs.bustime.presentation
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +22,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.WarningAmber
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,23 +40,35 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavController
 import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.Chip
+import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
-import co.mesquita.labs.bustime.Constants.EXTRA_RESULT
+import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.composable
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
+import com.google.android.horologist.annotations.ExperimentalHorologistApi
+import com.google.android.horologist.compose.layout.AppScaffold
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScreenScaffold
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
 import dagger.hilt.android.AndroidEntryPoint
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel: BusViewModel by viewModels()
     private val busStop = mutableStateOf("")
+    private val htmlContent = mutableStateOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -77,28 +82,186 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun onSearchButtonClick() {
+    private fun getBusStop(document: Document): String {
+        val title = document.select("title")
+        return title.text().substringAfterLast("Ponto ID:")
+    }
+
+    private fun onSearchButtonClick(navController: NavController) {
         this.viewModel.getBussTime(busStop.value).observe(this) {
-            val intent = Intent(this, BusTimeTable::class.java)
-            intent.putExtra(EXTRA_RESULT, it)
-            startActivity(intent)
+            htmlContent.value = it
+            val document: Document = Jsoup.parse(it)
+
+            if (getBusStop(document).isEmpty()) {
+                navController.navigate("notFound")
+            } else {
+                navController.navigate("busList")
+            }
         }
     }
 
+    @OptIn(ExperimentalHorologistApi::class)
     @Composable
     fun WearApp() {
+        val navController = rememberSwipeDismissableNavController()
+
         BusTimeGoianiaTheme {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colors.background),
-                contentAlignment = Alignment.Center
-            ) {
-                TimeText()
-                Column {
-                    Greeting()
-                    StopBusTextField()
-                    Button()
+            AppScaffold {
+                SwipeDismissableNavHost(
+                    navController = navController,
+                    startDestination = "home"
+                ) {
+                    composable("home") {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colors.background),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column {
+                                Greeting()
+                                StopBusTextField()
+                                Button(navController)
+                            }
+                        }
+                    }
+                    composable("notFound") {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colors.background),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.WarningAmber,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(45.dp),
+                                    tint = MaterialTheme.colors.primary,
+                                )
+                                Text(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(5.dp),
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    color = MaterialTheme.colors.primary,
+                                    text = stringResource(R.string.empty_table)
+                                )
+                            }
+                        }
+                    }
+                    composable("busList") {
+                        val columnState = rememberResponsiveColumnState()
+                        ScreenScaffold(scrollState = columnState) {
+                            ScalingLazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                columnState = columnState
+                            ) {
+                                item {
+                                    Text(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(bottom = 8.dp),
+                                        textAlign = TextAlign.Center,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 20.sp,
+                                        color = MaterialTheme.colors.primary,
+                                        text = stringResource(R.string.title_table, busStop.value)
+                                    )
+                                }
+                                val document: Document = Jsoup.parse(htmlContent.value)
+                                val timeTable = document.select("table.horariosRmtc")
+                                for (line in timeTable.select("tr.linha").drop(1)) {
+                                    val columns = line.select("td.coluna")
+                                    val busNumber = columns[0].text()
+                                    val destiny = columns[1].text()
+                                    var nextTime = columns[2].text()
+                                    nextTime = nextTime
+                                        .replace(Regex("(\\d+) Aprox\\."), "$1\\?")
+                                    var anotherNext = columns[3].text()
+                                    anotherNext = anotherNext
+                                        .replace(Regex("(\\d+) Aprox\\."), "$1\\?")
+
+                                    item {
+                                        Chip(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            label = {
+                                                Column {
+                                                    Text(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                            .padding(bottom = 8.dp),
+                                                        textAlign = TextAlign.Center,
+                                                        fontSize = 8.sp,
+                                                        color = MaterialTheme.colors.onSurfaceVariant,
+                                                        text = destiny,
+                                                    )
+                                                    Row(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                            .padding(horizontal = 8.dp)
+                                                            .padding(bottom = 8.dp),
+                                                        horizontalArrangement = Arrangement.SpaceBetween
+                                                    ) {
+                                                        Column(
+                                                            horizontalAlignment = Alignment.CenterHorizontally
+                                                        ) {
+                                                            androidx.compose.material3.Text(
+                                                                fontWeight = FontWeight.Bold,
+                                                                fontSize = 17.sp,
+                                                                color = MaterialTheme.colors.primary,
+                                                                text = busNumber,
+                                                            )
+                                                            androidx.compose.material3.Text(
+                                                                fontSize = 8.sp,
+                                                                color = MaterialTheme.colors.onSurfaceVariant,
+                                                                text = stringResource(R.string.table_line),
+                                                            )
+                                                        }
+                                                        Column(
+                                                            horizontalAlignment = Alignment.CenterHorizontally
+                                                        ) {
+                                                            androidx.compose.material3.Text(
+                                                                fontSize = 17.sp,
+                                                                color = MaterialTheme.colors.onSurface,
+                                                                text = nextTime,
+                                                            )
+                                                            androidx.compose.material3.Text(
+                                                                fontSize = 8.sp,
+                                                                color = MaterialTheme.colors.onSurfaceVariant,
+                                                                text = stringResource(R.string.table_next),
+                                                            )
+                                                        }
+                                                        Column(
+                                                            horizontalAlignment = Alignment.CenterHorizontally
+                                                        ) {
+                                                            androidx.compose.material3.Text(
+                                                                fontSize = 17.sp,
+                                                                color = MaterialTheme.colors.secondary,
+                                                                text = anotherNext,
+                                                            )
+                                                            androidx.compose.material3.Text(
+                                                                fontSize = 8.sp,
+                                                                color = MaterialTheme.colors.onSurfaceVariant,
+                                                                text = stringResource(R.string.table_another_next),
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            colors = ChipDefaults.primaryChipColors(backgroundColor = MaterialTheme.colors.surface),
+                                            enabled = false,
+                                            onClick = { /*TODO*/ }
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -163,11 +326,11 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun Button() {
+    fun Button(navController: NavController) {
         val isLoading by viewModel.isLoading
         Button(
             onClick = {
-                onSearchButtonClick()
+                onSearchButtonClick(navController)
             },
             enabled = !isLoading,
             modifier = Modifier
@@ -193,7 +356,6 @@ class MainActivity : ComponentActivity() {
                         .padding(2.dp),
                     tint = MaterialTheme.colors.background,
                 )
-                //Text(stringResource(id = R.string.search_button))
             }
         }
     }
