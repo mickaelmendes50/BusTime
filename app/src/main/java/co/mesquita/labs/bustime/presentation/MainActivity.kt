@@ -20,6 +20,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DirectionsBus
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.runtime.Composable
@@ -118,8 +119,8 @@ class MainActivity : ComponentActivity() {
                                 .background(MaterialTheme.colors.background),
                             contentAlignment = Alignment.Center
                         ) {
-                            Column {
-                                Greeting()
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                AppLogo()
                                 StopBusTextField()
                                 Button(navController)
                             }
@@ -311,17 +312,29 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun Greeting() {
+    fun AppLogo() {
+        Icon(
+            imageVector = Icons.Outlined.DirectionsBus,
+            contentDescription = null,
+            modifier = Modifier.size(60.dp),
+            tint = MaterialTheme.colors.primary,
+        )
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            fontSize = 12.sp,
+            color = MaterialTheme.colors.primary,
+            text = stringResource(R.string.title)
+        )
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(5.dp)
-                .padding(top = 15.dp),
+                .padding(bottom = 6.dp),
             textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            color = MaterialTheme.colors.primary,
-            text = stringResource(R.string.title)
+            fontSize = 8.sp,
+            color = MaterialTheme.colors.onSurfaceVariant,
+            text = "RMTC Goiânia"
         )
     }
 
