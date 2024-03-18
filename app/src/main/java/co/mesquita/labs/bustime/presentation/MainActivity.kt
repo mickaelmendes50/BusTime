@@ -14,18 +14,18 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -100,43 +100,46 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun StopBusTextField() {
         var text by remember { mutableStateOf("") }
         val focusManager = LocalFocusManager.current
         val keyboardController = LocalSoftwareKeyboardController.current
 
-        OutlinedTextField(
+        BasicTextField(
             value = text,
             onValueChange = { it ->
                 val filteredText = it.filter { !it.isWhitespace() && it != '\n' }
                 text = filteredText
                 busStop.value = filteredText
             },
-            label = {
-                Text(
-                    text = stringResource(
-                        id = R.string.text_field_label
-                    ),
-                    style = TextStyle(
-                        color = Color.Gray,
-                    )
-                )
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = MaterialTheme.colors.primary,
-            ),
-            textStyle = TextStyle(color = Color.White),
             modifier = Modifier
-                .padding(horizontal = 15.dp)
-                .padding(bottom = 15.dp),
+                .padding(horizontal = 4.dp)
+                .padding(6.dp),
+            textStyle = TextStyle(color = Color.White),
+            decorationBox = { innerTextField ->
+                Row(
+                    modifier = Modifier
+                        .background(MaterialTheme.colors.surface, RoundedCornerShape(percent = 50))
+                        .padding(9.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (text.isEmpty()) {
+                        Text(
+                            text = stringResource(id = R.string.text_field_label),
+                            style = TextStyle(color = Color.Gray),
+                            fontSize = 15.sp
+                        )
+                    }
+                    innerTextField()
+                }
+            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             keyboardActions = KeyboardActions(onDone = {
                 keyboardController?.hide()
                 focusManager.clearFocus()
             }),
-            shape = CircleShape,
         )
     }
 
