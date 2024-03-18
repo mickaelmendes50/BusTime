@@ -4,9 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.focusable
-import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,11 +17,8 @@ import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.input.rotary.onRotaryScrollEvent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -35,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
-import androidx.wear.compose.foundation.rememberActiveFocusRequester
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.Icon
@@ -48,7 +41,8 @@ import androidx.wear.compose.material.VignettePosition
 import co.mesquita.labs.bustime.Constants
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
-import kotlinx.coroutines.launch
+import com.google.android.horologist.annotations.ExperimentalHorologistApi
+import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -79,7 +73,7 @@ class BusTimeTable : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalWearFoundationApi::class)
+@OptIn(ExperimentalWearFoundationApi::class, ExperimentalHorologistApi::class)
 @Composable
 fun ShowTable(document: Document, busStop: String) {
     BusTimeGoianiaTheme {
@@ -98,20 +92,9 @@ fun ShowTable(document: Document, busStop: String) {
                 )
             }
         ) {
-            val focusRequester = rememberActiveFocusRequester()
-            val coroutineScope = rememberCoroutineScope()
-
             ScalingLazyColumn(
                 modifier = Modifier
-                    .onRotaryScrollEvent {
-                        coroutineScope.launch {
-                            listState.scrollBy(it.verticalScrollPixels)
-                            listState.animateScrollBy(0f)
-                        }
-                        true
-                    }
-                    .focusRequester(focusRequester)
-                    .focusable()
+                    .rotaryWithScroll(listState)
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 state = listState
