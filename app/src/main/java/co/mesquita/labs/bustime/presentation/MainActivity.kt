@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,10 +15,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DirectionsBus
 import androidx.compose.material.icons.outlined.Search
@@ -43,6 +46,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
+import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
+import androidx.wear.compose.foundation.rememberActiveFocusRequester
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.Icon
@@ -59,7 +64,9 @@ import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.AppScaffold
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScreenScaffold
+import com.google.android.horologist.compose.layout.fillMaxRectangle
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
 import dagger.hilt.android.AndroidEntryPoint
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -101,7 +108,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalHorologistApi::class)
+    @OptIn(ExperimentalHorologistApi::class, ExperimentalWearFoundationApi::class)
     @Composable
     fun WearApp() {
         val navController = rememberSwipeDismissableNavController()
@@ -121,8 +128,40 @@ class MainActivity : ComponentActivity() {
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 AppLogo()
-                                StopBusTextField()
+                                //StopBusTextField()
                                 Button(navController)
+                            }
+                        }
+                    }
+                    composable("search") {
+                        val isLoading by viewModel.isLoading
+                        Box(
+                            modifier = Modifier
+                                .fillMaxRectangle()
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = "Pesquisar ponto",
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(bottom = 8.dp)
+                                )
+                                StopBusTextField(navController)
+                                if (isLoading) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier
+                                            .size(35.dp)
+                                            .padding(5.dp)
+                                            .aspectRatio(1f),
+                                        indicatorColor = MaterialTheme.colors.primary,
+                                        trackColor = MaterialTheme.colors.background
+                                    )
+                                }
                             }
                         }
                     }
@@ -205,7 +244,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun StopBusTextField() {
+    fun StopBusTextField(navController: NavController) {
         var text by remember { mutableStateOf("") }
         val focusManager = LocalFocusManager.current
         val keyboardController = LocalSoftwareKeyboardController.current
@@ -217,9 +256,9 @@ class MainActivity : ComponentActivity() {
                 text = filteredText
                 busStop.value = filteredText
             },
-            modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .padding(6.dp),
+//            modifier = Modifier
+//                //.padding(horizontal = 4.dp)
+//                .padding(6.dp),
             textStyle = TextStyle(color = Color.White),
             cursorBrush = SolidColor(MaterialTheme.colors.primary),
             decorationBox = { innerTextField ->
@@ -230,13 +269,13 @@ class MainActivity : ComponentActivity() {
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (text.isEmpty()) {
-                        Text(
-                            text = stringResource(id = R.string.text_field_label),
-                            style = TextStyle(color = Color.Gray),
-                            fontSize = 15.sp
-                        )
-                    }
+//                    if (text.isEmpty()) {
+//                        Text(
+//                            text = stringResource(id = R.string.text_field_label),
+//                            style = TextStyle(color = Color.Gray),
+//                            fontSize = 15.sp
+//                        )
+//                    }
                     innerTextField()
                 }
             },
@@ -244,6 +283,8 @@ class MainActivity : ComponentActivity() {
             keyboardActions = KeyboardActions(onDone = {
                 keyboardController?.hide()
                 focusManager.clearFocus()
+                if (text.isNotEmpty())
+                    onSearchButtonClick(navController)
             }),
         )
     }
@@ -253,23 +294,23 @@ class MainActivity : ComponentActivity() {
         Icon(
             imageVector = Icons.Outlined.DirectionsBus,
             contentDescription = null,
-            modifier = Modifier.size(60.dp),
+            modifier = Modifier.size(64.dp),
             tint = MaterialTheme.colors.primary,
         )
         Text(
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
-            fontSize = 12.sp,
+            fontSize = 16.sp,
             color = MaterialTheme.colors.primary,
             text = stringResource(R.string.title)
         )
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 6.dp),
+                .padding(bottom = 10.dp),
             textAlign = TextAlign.Center,
-            fontSize = 8.sp,
+            fontSize = 12.sp,
             color = MaterialTheme.colors.onSurfaceVariant,
             text = "RMTC Goiânia"
         )
@@ -280,7 +321,8 @@ class MainActivity : ComponentActivity() {
         val isLoading by viewModel.isLoading
         Button(
             onClick = {
-                onSearchButtonClick(navController)
+                //onSearchButtonClick(navController)
+                navController.navigate("search")
             },
             enabled = !isLoading,
             modifier = Modifier
