@@ -8,33 +8,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,6 +37,7 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.components.BusChip
 import co.mesquita.labs.bustime.components.SearchButton
+import co.mesquita.labs.bustime.components.SearchTextField
 import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.presentation.theme.AppLogo
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
@@ -87,8 +75,8 @@ class MainActivity : ComponentActivity() {
         return title.text().substringAfterLast("Ponto ID:")
     }
 
-    private fun onSearchButtonClick(navController: NavController) {
-        this.viewModel.getBussTime(busStop.value).observe(this) {
+    private fun onSearchButtonClick(navController: NavController, stopNumber: String) {
+        this.viewModel.getBussTime(stopNumber).observe(this) {
             htmlContent.value = it
             val document: Document = Jsoup.parse(it)
 
@@ -142,7 +130,9 @@ class MainActivity : ComponentActivity() {
                                     fontWeight = FontWeight.Bold,
                                     modifier = Modifier.padding(bottom = 8.dp)
                                 )
-                                StopBusTextField(navController)
+                                SearchTextField(navController) { navController, stopNumber ->
+                                    onSearchButtonClick(navController, stopNumber)
+                                }
                                 if (isLoading) {
                                     CircularProgressIndicator(
                                         modifier = Modifier
@@ -232,41 +222,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    @Composable
-    fun StopBusTextField(navController: NavController) {
-        var text by remember { mutableStateOf("") }
-        val focusManager = LocalFocusManager.current
-        val keyboardController = LocalSoftwareKeyboardController.current
-
-        BasicTextField(
-            value = text,
-            onValueChange = { it ->
-                val filteredText = it.filter { !it.isWhitespace() && it != '\n' }
-                text = filteredText
-                busStop.value = filteredText
-            },
-            textStyle = TextStyle(color = Color.White),
-            cursorBrush = SolidColor(MaterialTheme.colors.primary),
-            decorationBox = { innerTextField ->
-                Row(
-                    modifier = Modifier
-                        .background(MaterialTheme.colors.surface, RoundedCornerShape(percent = 50))
-                        .padding(9.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    innerTextField()
-                }
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            keyboardActions = KeyboardActions(onDone = {
-                keyboardController?.hide()
-                focusManager.clearFocus()
-                if (text.isNotEmpty())
-                    onSearchButtonClick(navController)
-            }),
-        )
     }
 }
