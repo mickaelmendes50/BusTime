@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,8 +19,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DirectionsBus
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
-import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
@@ -53,6 +49,7 @@ import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.components.BusChip
+import co.mesquita.labs.bustime.components.SearchButton
 import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.presentation.theme.AppLogo
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
@@ -123,7 +120,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 AppLogo()
-                                Button(navController)
+                                SearchButton(navController)
                             }
                         }
                     }
@@ -271,40 +268,5 @@ class MainActivity : ComponentActivity() {
                     onSearchButtonClick(navController)
             }),
         )
-    }
-
-    @Composable
-    fun Button(navController: NavController) {
-        val isLoading by viewModel.isLoading
-        Button(
-            onClick = {
-                navController.navigate("search")
-            },
-            enabled = !isLoading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .size(34.dp)
-                .padding(horizontal = 85.dp),
-        ) {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(5.dp)
-                        .aspectRatio(1f),
-                    indicatorColor = MaterialTheme.colors.primary,
-                    trackColor = MaterialTheme.colors.background
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Outlined.Search,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(30.dp)
-                        .padding(2.dp),
-                    tint = MaterialTheme.colors.background,
-                )
-            }
-        }
     }
 }
