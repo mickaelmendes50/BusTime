@@ -52,7 +52,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import co.mesquita.labs.bustime.R
-import co.mesquita.labs.bustime.components.busChip
+import co.mesquita.labs.bustime.components.BusChip
 import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
@@ -220,7 +220,7 @@ class MainActivity : ComponentActivity() {
                                         .replace(Regex("(\\d+) Aprox\\."), "$1\\?")
 
                                     item { 
-                                        busChip(
+                                        BusChip(
                                             destiny = destiny,
                                             busNumber = busNumber,
                                             nextTime = nextTime,

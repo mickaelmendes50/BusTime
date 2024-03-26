@@ -20,7 +20,7 @@ import androidx.wear.compose.material.Text
 import co.mesquita.labs.bustime.R
 
 @Composable
-fun busChip(
+fun BusChip(
     destiny: String,
     busNumber: String,
     nextTime: String,
