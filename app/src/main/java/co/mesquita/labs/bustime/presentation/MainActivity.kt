@@ -15,17 +15,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DirectionsBus
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.WarningAmber
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,8 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
-import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
-import androidx.wear.compose.foundation.rememberActiveFocusRequester
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.Icon
@@ -66,7 +61,6 @@ import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.fillMaxRectangle
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
-import com.google.android.horologist.compose.rotaryinput.rotaryWithScroll
 import dagger.hilt.android.AndroidEntryPoint
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -108,7 +102,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalHorologistApi::class, ExperimentalWearFoundationApi::class)
+    @OptIn(ExperimentalHorologistApi::class)
     @Composable
     fun WearApp() {
         val navController = rememberSwipeDismissableNavController()
@@ -128,7 +122,6 @@ class MainActivity : ComponentActivity() {
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 AppLogo()
-                                //StopBusTextField()
                                 Button(navController)
                             }
                         }
@@ -256,9 +249,6 @@ class MainActivity : ComponentActivity() {
                 text = filteredText
                 busStop.value = filteredText
             },
-//            modifier = Modifier
-//                //.padding(horizontal = 4.dp)
-//                .padding(6.dp),
             textStyle = TextStyle(color = Color.White),
             cursorBrush = SolidColor(MaterialTheme.colors.primary),
             decorationBox = { innerTextField ->
@@ -269,13 +259,6 @@ class MainActivity : ComponentActivity() {
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-//                    if (text.isEmpty()) {
-//                        Text(
-//                            text = stringResource(id = R.string.text_field_label),
-//                            style = TextStyle(color = Color.Gray),
-//                            fontSize = 15.sp
-//                        )
-//                    }
                     innerTextField()
                 }
             },
@@ -321,7 +304,6 @@ class MainActivity : ComponentActivity() {
         val isLoading by viewModel.isLoading
         Button(
             onClick = {
-                //onSearchButtonClick(navController)
                 navController.navigate("search")
             },
             enabled = !isLoading,
