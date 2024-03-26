@@ -139,7 +139,7 @@ class MainActivity : ComponentActivity() {
                                 verticalArrangement = Arrangement.Center
                             ) {
                                 Text(
-                                    text = "Pesquisar ponto",
+                                    text = stringResource(R.string.search_title),
                                     fontSize = 14.sp,
                                     fontWeight = FontWeight.Bold,
                                     modifier = Modifier.padding(bottom = 8.dp)
@@ -203,7 +203,7 @@ class MainActivity : ComponentActivity() {
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 20.sp,
                                         color = MaterialTheme.colors.primary,
-                                        text = stringResource(R.string.title_table, busStop.value)
+                                        text = stringResource(R.string.table_title, busStop.value)
                                     )
                                 }
                                 val document: Document = Jsoup.parse(htmlContent.value)
@@ -295,7 +295,7 @@ class MainActivity : ComponentActivity() {
             textAlign = TextAlign.Center,
             fontSize = 12.sp,
             color = MaterialTheme.colors.onSurfaceVariant,
-            text = "RMTC Goiânia"
+            text = stringResource(R.string.subtitle)
         )
     }
 

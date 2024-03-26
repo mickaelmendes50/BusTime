@@ -1,5 +1,24 @@
 <resources>
+    <!--  App name  -->
+    <string name="app_name">BusTime Goiânia</string>
+
+    <!--  TODO: Tile  -->
+    <string name="tile_label">Example tile</string>
+    <string name="complication_label">Example complication</string>
+
+    <!--  Home screen  -->
     <string name="title">Horário do Ônibus</string>
-    <string name="search_button">Buscar</string>
-    <string name="edit_user_input">Informe o número do ponto</string>
+    <string name="subtitle">"BusTime Goiânia"</string>
+
+    <!--  Search screen  -->
+    <string name="search_title">Pesquisar ponto</string>
+
+    <!--  Empty table  -->
+    <string name="empty_table">Ponto não encontrado</string>
+
+    <!--  Bus time table  -->
+    <string name="table_title">Ponto %s</string>
+    <string name="table_line">LINHA</string>
+    <string name="table_next">PRÓX.</string>
+    <string name="table_another_next">SEG.</string>
 </resources>

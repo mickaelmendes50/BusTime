@@ -1,18 +1,23 @@
 <resources>
+    <!--  App name  -->
     <string name="app_name">BusTime Goiânia</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
+
+    <!--  TODO: Tile  -->
     <string name="tile_label">Example tile</string>
     <string name="complication_label">Example complication</string>
+
+    <!--  Home screen  -->
     <string name="title">Horário do Ônibus</string>
-    <string name="search_button">Buscar</string>
-    <string name="edit_user_input">Informe o número do ponto</string>
-    <string name="text_field_label">Número do ponto</string>
-    <string name="title_activity_bus_time_table">BusTimeTable</string>
-    <string name="title_table">Ponto %s</string>
+    <string name="subtitle">"BusTime Goiânia"</string>
+
+    <!--  Search screen  -->
+    <string name="search_title">Pesquisar ponto</string>
+
+    <!--  Empty table  -->
     <string name="empty_table">Ponto não encontrado</string>
+
+    <!--  Bus time table  -->
+    <string name="table_title">Ponto %s</string>
     <string name="table_line">LINHA</string>
     <string name="table_next">PRÓX.</string>
     <string name="table_another_next">SEG.</string>
