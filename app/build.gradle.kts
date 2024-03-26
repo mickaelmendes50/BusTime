@@ -81,7 +81,7 @@ dependencies {
     runtimeOnly("com.google.android.horologist:horologist-base-ui:0.4.17")
     runtimeOnly("com.google.android.horologist:horologist-compose-layout:0.6.4")
     runtimeOnly("com.google.android.horologist:horologist-compose-material:0.6.4")
-    implementation("com.google.android.horologist:horologist-compose-material")
+    implementation("com.google.android.horologist:horologist-compose-material:0.6.4")
     androidTestImplementation(platform("androidx.compose:compose-bom:2024.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     testImplementation("junit:junit:4.13.2")
