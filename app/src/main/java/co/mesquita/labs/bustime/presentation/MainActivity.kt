@@ -50,6 +50,7 @@ class MainActivity : ComponentActivity() {
     private fun onSearchButtonClick(navController: NavController, stopNumber: String) {
         this.viewModel.getBussTime(stopNumber).observe(this) {
             htmlContent.value = it
+            busStop.value = stopNumber
             val document: Document = Jsoup.parse(it)
 
             if (getBusStop(document).isEmpty()) {
