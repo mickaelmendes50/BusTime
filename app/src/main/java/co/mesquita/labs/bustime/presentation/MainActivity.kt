@@ -54,6 +54,7 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.components.BusChip
 import co.mesquita.labs.bustime.model.BusViewModel
+import co.mesquita.labs.bustime.presentation.theme.AppLogo
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.AppScaffold
@@ -269,33 +270,6 @@ class MainActivity : ComponentActivity() {
                 if (text.isNotEmpty())
                     onSearchButtonClick(navController)
             }),
-        )
-    }
-
-    @Composable
-    fun AppLogo() {
-        Icon(
-            imageVector = Icons.Outlined.DirectionsBus,
-            contentDescription = null,
-            modifier = Modifier.size(64.dp),
-            tint = MaterialTheme.colors.primary,
-        )
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            color = MaterialTheme.colors.primary,
-            text = stringResource(R.string.title)
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 10.dp),
-            textAlign = TextAlign.Center,
-            fontSize = 12.sp,
-            color = MaterialTheme.colors.onSurfaceVariant,
-            text = stringResource(R.string.subtitle)
         )
     }
 
