@@ -5,9 +5,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class NetworkUtils {
     companion object {
-        fun getRetrofitInstance(path: String) : Retrofit {
+        private const val BASE_URL = "https://m.rmtcgoiania.com.br/"
+
+        fun getRetrofitInstance() : Retrofit {
             return Retrofit.Builder()
-                .baseUrl(path)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         }

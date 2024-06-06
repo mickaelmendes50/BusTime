@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
@@ -22,12 +23,13 @@ import co.mesquita.labs.bustime.presentation.theme.NotFoundScreen
 import co.mesquita.labs.bustime.presentation.theme.SearchScreen
 import co.mesquita.labs.bustime.util.NetworkUtils
 import com.google.android.horologist.compose.layout.AppScaffold
-import com.google.gson.JsonObject
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import retrofit2.Call
-import retrofit2.Response
+import retrofit2.HttpException
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -54,21 +56,24 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun isStopIdValid(navController: NavController, stopId: String) {
-        val retrofitClient = NetworkUtils.getRetrofitInstance("https://m.rmtcgoiania.com.br/")
-        val endpoint = retrofitClient.create(Endpoints::class.java)
+        val retrofitClient = NetworkUtils.getRetrofitInstance()
+        val service = retrofitClient.create(Endpoints::class.java)
 
-        endpoint.isStopIdValid(stopId).enqueue(object : retrofit2.Callback<JsonObject>{
-            override fun onResponse(p0: Call<JsonObject>, p1: Response<JsonObject>) {
-                val status = p1.body()?.get("status")?.asString
-                if (status != "sucesso") {
-                    navController.navigate("notFound")
+        lifecycleScope.launch {
+            val response = service.isStopIdValid(stopId)
+            withContext(Dispatchers.Main) {
+                try {
+                    if (response.isSuccessful) {
+                        val status = response.body()?.get("status")?.asString
+                        if (status != "sucesso") {
+                            navController.navigate("notFound")
+                        }
+                    }
+                } catch (e: HttpException) {
+                    Log.e("Retrofit", "Exception ${e.message}")
                 }
             }
-
-            override fun onFailure(p0: Call<JsonObject>, p1: Throwable) {
-                Log.e("Retrofit", "Falha na requisição da validação do número do ponto")
-            }
-        })
+        }
     }
 
     private fun onSearchButtonClick(navController: NavController, stopNumber: String) {
