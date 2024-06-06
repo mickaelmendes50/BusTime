@@ -78,6 +78,7 @@ dependencies {
     implementation("org.jsoup:jsoup:1.17.2")
     implementation("androidx.compose.material:material-icons-core:1.7.0-alpha05")
     implementation("androidx.compose.material:material-icons-extended:1.7.0-alpha05")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.7")
     runtimeOnly("com.google.android.horologist:horologist-base-ui:0.4.17")
     runtimeOnly("com.google.android.horologist:horologist-compose-layout:0.6.4")
     runtimeOnly("com.google.android.horologist:horologist-compose-material:0.6.4")

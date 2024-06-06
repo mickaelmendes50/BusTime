@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
@@ -66,7 +67,7 @@ class MainActivity : ComponentActivity() {
                         HomeScreen(navController)
                     }
                     composable("search") {
-                        val isLoading by viewModel.isLoading
+                        val isLoading by viewModel.isLoading.observeAsState()
                         SearchScreen(isLoading, navController) { navController, stopNumber ->
                             onSearchButtonClick(navController, stopNumber)
                         }

@@ -24,7 +24,7 @@ import com.google.android.horologist.compose.layout.fillMaxRectangle
 
 @Composable
 fun SearchScreen(
-    isLoading: Boolean,
+    isLoading: Boolean?,
     navController: NavController,
     onSearchButtonClick: (NavController, String) -> Unit
 ) {
@@ -47,7 +47,7 @@ fun SearchScreen(
             SearchTextField(navController) { navController, stopNumber ->
                 onSearchButtonClick(navController, stopNumber)
             }
-            if (isLoading) {
+            if (isLoading == true) {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .size(35.dp)

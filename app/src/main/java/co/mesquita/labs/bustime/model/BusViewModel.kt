@@ -13,13 +13,14 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 class BusViewModel : ViewModel() {
-    val isLoading = mutableStateOf(false)
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> = _isLoading
 
     fun isValidStopId(stopId: String): LiveData<Boolean> {
         val resultLiveData = MutableLiveData<Boolean>()
         val retrofitClient = NetworkUtils.getRetrofitInstance()
         val service = retrofitClient.create(Endpoints::class.java)
-        isLoading.value = true
+        _isLoading.postValue(true)
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -31,7 +32,7 @@ class BusViewModel : ViewModel() {
             } catch (e: HttpException) {
                 Log.e("Retrofit", "Exception ${e.message}")
             }
-            isLoading.value = false
+            _isLoading.postValue(false)
         }
         return resultLiveData
     }
@@ -40,7 +41,7 @@ class BusViewModel : ViewModel() {
         val resultLiveData = MutableLiveData<String>()
         val retrofitClient = NetworkUtils.getRetrofitInstance("string")
         val service = retrofitClient.create(Endpoints::class.java)
-        isLoading.value = true
+        _isLoading.postValue(true)
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -50,7 +51,7 @@ class BusViewModel : ViewModel() {
             } catch (e: HttpException) {
                 Log.e("Retrofit", "Exception ${e.message}")
             }
-            isLoading.value = false
+            _isLoading.postValue(false)
         }
         return resultLiveData
     }
