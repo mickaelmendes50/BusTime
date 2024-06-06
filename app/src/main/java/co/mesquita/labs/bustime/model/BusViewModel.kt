@@ -1,6 +1,5 @@
 package co.mesquita.labs.bustime.model
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
