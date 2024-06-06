@@ -5,34 +5,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import co.mesquita.labs.bustime.api.Endpoints
-import co.mesquita.labs.bustime.repository.BusRepository
 import co.mesquita.labs.bustime.util.NetworkUtils
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import javax.inject.Inject
 
-@HiltViewModel
-class BusViewModel @Inject constructor(
-    private val busRepository: BusRepository
-): ViewModel() {
+class BusViewModel : ViewModel() {
     val isLoading = mutableStateOf(false)
 
-    fun isStopIdValid(stopId: String): LiveData<Boolean> {
+    fun isValidStopId(stopId: String): LiveData<Boolean> {
+        val resultLiveData = MutableLiveData<Boolean>()
         val retrofitClient = NetworkUtils.getRetrofitInstance()
         val service = retrofitClient.create(Endpoints::class.java)
-        val resultLiveData = MutableLiveData<Boolean>()
         isLoading.value = true
 
         viewModelScope.launch(Dispatchers.IO) {
-            val response = service.isStopIdValid(stopId)
             try {
+                val response = service.isStopIdValid(stopId)
                 if (response.isSuccessful) {
                     val status = response.body()?.get("status")?.asString
                     resultLiveData.postValue(status == "sucesso")
@@ -45,12 +36,20 @@ class BusViewModel @Inject constructor(
         return resultLiveData
     }
 
-    fun getBussTime(busStop: String): LiveData<String> {
-        isLoading.value = true
+    fun getBussTime(stopId: String): LiveData<String> {
         val resultLiveData = MutableLiveData<String>()
+        val retrofitClient = NetworkUtils.getRetrofitInstance("string")
+        val service = retrofitClient.create(Endpoints::class.java)
+        isLoading.value = true
+
         viewModelScope.launch(Dispatchers.IO) {
-            val result = busRepository.getBusTime(busStop)
-            resultLiveData.postValue(result)
+            try {
+                val response = service.getBusTime(stopId)
+                if (response.isSuccessful)
+                    resultLiveData.postValue(response.body())
+            } catch (e: HttpException) {
+                Log.e("Retrofit", "Exception ${e.message}")
+            }
             isLoading.value = false
         }
         return resultLiveData

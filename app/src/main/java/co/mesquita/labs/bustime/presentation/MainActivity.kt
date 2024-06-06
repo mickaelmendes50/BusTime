@@ -19,11 +19,7 @@ import co.mesquita.labs.bustime.presentation.theme.HomeScreen
 import co.mesquita.labs.bustime.presentation.theme.NotFoundScreen
 import co.mesquita.labs.bustime.presentation.theme.SearchScreen
 import com.google.android.horologist.compose.layout.AppScaffold
-import dagger.hilt.android.AndroidEntryPoint
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel: BusViewModel by viewModels()
@@ -42,23 +38,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun getBusStop(document: Document): String {
-        val title = document.select("title")
-        return title.text().substringAfterLast("Ponto ID:")
-    }
-
-    private fun onSearchButtonClick(navController: NavController, stopNumber: String) {
-        this.viewModel.isStopIdValid(stopNumber).observe(this) {
-            isValid -> if (!isValid) navController.navigate("notFound")
-        }
-
-        this.viewModel.getBussTime(stopNumber).observe(this) {
-            htmlContent.value = it
-            busStop.value = stopNumber
-            val document: Document = Jsoup.parse(it)
-
-            if (getBusStop(document).isNotEmpty()) {
-                navController.navigate("busList")
+    private fun onSearchButtonClick(navController: NavController, stopId: String) {
+        this.viewModel.isValidStopId(stopId).observe(this) { isValid ->
+            if (!isValid) {
+                navController.navigate("notFound")
+            } else {
+                this.viewModel.getBussTime(stopId).observe(this) {
+                    htmlContent.value = it
+                    busStop.value = stopId
+                    navController.navigate("busList")
+                }
             }
         }
     }
@@ -87,7 +76,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("busList") {
                         BusListScreen(
-                            stopNumber = busStop.value,
+                            stopId = busStop.value,
                             htmlContent = htmlContent.value
                         )
                     }

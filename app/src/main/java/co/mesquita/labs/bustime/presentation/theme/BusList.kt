@@ -24,7 +24,7 @@ import org.jsoup.nodes.Document
 @OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun BusListScreen(
-    stopNumber: String,
+    stopId: String,
     htmlContent: String
 ) {
     val columnState = rememberResponsiveColumnState()
@@ -43,21 +43,29 @@ fun BusListScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     color = MaterialTheme.colors.primary,
-                    text = stringResource(R.string.table_title, stopNumber)
+                    text = stringResource(R.string.table_title, stopId)
                 )
             }
             val document: Document = Jsoup.parse(htmlContent)
-            val timeTable = document.select("table.horariosRmtc")
-            for (line in timeTable.select("tr.linha").drop(1)) {
-                val columns = line.select("td.coluna")
+            val timeTable = document.select("table.table-sm.table-striped.subtab-previsoes")
+            for (line in timeTable.select("tr").drop(1)) {
+                val columns = line.select("td")
                 val busNumber = columns[0].text()
                 val destiny = columns[1].text()
-                var nextTime = columns[2].text()
-                nextTime = nextTime
-                    .replace(Regex("(\\d+) Aprox\\."), "$1\\?")
-                var anotherNext = columns[3].text()
-                anotherNext = anotherNext
-                    .replace(Regex("(\\d+) Aprox\\."), "$1\\?")
+                val nextTimeElement = columns[2]
+                val anotherNextElement = columns[3]
+
+                val nextTime = if (nextTimeElement.text() != "--") {
+                    nextTimeElement.ownText().replace(Regex("[^\\d]+"), "").replace("(Aprox.)", "?")
+                } else {
+                    "--"
+                }
+
+                val anotherNext = if (anotherNextElement.text() != "--") {
+                    anotherNextElement.ownText().replace(Regex("[^\\d]+"), "").replace("(Aprox.)", "?")
+                } else {
+                    "--"
+                }
 
                 item {
                     BusChip(
