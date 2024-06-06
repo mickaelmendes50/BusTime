@@ -24,8 +24,8 @@ import com.google.android.horologist.compose.layout.AppScaffold
 class MainActivity : ComponentActivity() {
 
     private val viewModel: BusViewModel by viewModels()
-    private val busStop = mutableStateOf("")
     private val htmlContent = mutableStateOf("")
+    private lateinit var mStopId: String;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -40,13 +40,13 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun onSearchButtonClick(navController: NavController, stopId: String) {
+        mStopId = stopId
         this.viewModel.isValidStopId(stopId).observe(this) { isValid ->
             if (!isValid) {
                 navController.navigate("notFound")
             } else {
                 this.viewModel.getBussTime(stopId).observe(this) {
                     htmlContent.value = it
-                    busStop.value = stopId
                     navController.navigate("busList")
                 }
             }
@@ -68,8 +68,8 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("search") {
                         val isLoading by viewModel.isLoading.observeAsState()
-                        SearchScreen(isLoading, navController) { navController, stopNumber ->
-                            onSearchButtonClick(navController, stopNumber)
+                        SearchScreen(isLoading, navController) { navController, stopId ->
+                            onSearchButtonClick(navController, stopId)
                         }
                     }
                     composable("notFound") {
@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("busList") {
                         BusListScreen(
-                            stopId = busStop.value,
+                            stopId = mStopId,
                             htmlContent = htmlContent.value
                         )
                     }
