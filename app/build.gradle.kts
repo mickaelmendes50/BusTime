@@ -67,12 +67,10 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.7.0-alpha05")
 
     // Compose
-    implementation("androidx.compose.ui:ui-graphics")
+    implementation(platform("androidx.compose:compose-bom:2024.05.00"))
+    implementation("androidx.activity:activity-compose:1.9.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.6.7")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.7")
-    implementation(platform("androidx.compose:compose-bom:2024.03.00"))
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.03.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    testImplementation("junit:junit:4.13.2")
 
     // Wear
     implementation("androidx.wear:wear-input:1.2.0-alpha02")
@@ -90,9 +88,16 @@ dependencies {
 
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("org.jsoup:jsoup:1.17.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.1")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+
+    // Testing
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.7")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.6.7")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
 }

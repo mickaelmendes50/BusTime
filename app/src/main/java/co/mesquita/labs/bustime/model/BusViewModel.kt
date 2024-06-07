@@ -1,13 +1,11 @@
 package co.mesquita.labs.bustime.model
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.mesquita.labs.bustime.api.Endpoints
-import co.mesquita.labs.bustime.components.BusChip
 import co.mesquita.labs.bustime.util.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
