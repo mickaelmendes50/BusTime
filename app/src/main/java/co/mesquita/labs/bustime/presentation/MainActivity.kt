@@ -4,22 +4,38 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
+import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.Text
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import co.mesquita.labs.bustime.R
+import co.mesquita.labs.bustime.components.BusChip
 import co.mesquita.labs.bustime.model.BusViewModel
-import co.mesquita.labs.bustime.presentation.theme.BusListScreen
 import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
 import co.mesquita.labs.bustime.presentation.theme.HomeScreen
 import co.mesquita.labs.bustime.presentation.theme.NotFoundScreen
 import co.mesquita.labs.bustime.presentation.theme.SearchScreen
+import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.AppScaffold
+import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScreenScaffold
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
 
 class MainActivity : ComponentActivity() {
 
@@ -76,11 +92,49 @@ class MainActivity : ComponentActivity() {
                         NotFoundScreen()
                     }
                     composable("busList") {
-                        BusListScreen(
-                            stopId = mStopId,
-                            htmlContent = htmlContent.value
-                        )
+                        BusListScreen()
                     }
+                }
+            }
+        }
+    }
+
+    @OptIn(ExperimentalHorologistApi::class)
+    @Composable
+    fun BusListScreen() {
+        val columnState = rememberResponsiveColumnState()
+        val destinies by viewModel.destinyList.observeAsState(emptyList())
+        val busNumbers by viewModel.busNumberList.observeAsState(emptyList())
+        val nextTimes by viewModel.nextTimeList.observeAsState(emptyList())
+        val anotherNexts by viewModel.anotherNextList.observeAsState(emptyList())
+
+        ScreenScaffold(scrollState = columnState) {
+            ScalingLazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(),
+                columnState = columnState
+            ) {
+                item {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = MaterialTheme.colors.primary,
+                        text = stringResource(R.string.table_title, mStopId)
+                    )
+                }
+
+                // Create a BusChip for each bus info
+                items(destinies.size) { index ->
+                    BusChip(
+                        destiny = destinies[index],
+                        busNumber = busNumbers[index],
+                        nextTime = nextTimes[index],
+                        anotherNext = anotherNexts[index]
+                    )
                 }
             }
         }
