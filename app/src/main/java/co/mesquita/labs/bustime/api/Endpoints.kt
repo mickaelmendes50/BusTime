@@ -18,6 +18,12 @@ interface Endpoints {
         @Field("txtNumeroPonto") stopId: String
     ): Response<JsonObject>
 
+    @FormUrlEncoded
+    @POST("/pontoparada/previsaochegada")
+    suspend fun postBusTable(
+        @Field("qryIdPontoParada") stopId: String
+    ): Response<JsonObject>
+
     @GET("/horariodeviagem/visualizar/ponto/{stopId}")
     @Headers(REQUEST_HEADER)
     suspend fun getBusTime(

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.mesquita.labs.bustime.api.Endpoints
+import co.mesquita.labs.bustime.util.Constants.BASE_WEB_URL
 import co.mesquita.labs.bustime.util.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ class BusViewModel : ViewModel() {
 
     fun isValidStopId(stopId: String): LiveData<Boolean> {
         val resultLiveData = MutableLiveData<Boolean>()
-        val retrofitClient = NetworkUtils.getRetrofitInstance()
+        val retrofitClient = NetworkUtils.getRetrofitInstance(BASE_WEB_URL)
         val service = retrofitClient.create(Endpoints::class.java)
         _isLoading.postValue(true)
 
@@ -53,7 +54,7 @@ class BusViewModel : ViewModel() {
         val busNumbers = mutableListOf<String>()
         val nextTimes = mutableListOf<String>()
         val anotherNexts = mutableListOf<String>()
-        val retrofitClient = NetworkUtils.getRetrofitInstance("string")
+        val retrofitClient = NetworkUtils.getRetrofitInstance(BASE_WEB_URL,"string")
         val service = retrofitClient.create(Endpoints::class.java)
         _isLoading.postValue(true)
 

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,7 +39,6 @@ import com.google.android.horologist.compose.layout.rememberResponsiveColumnStat
 class MainActivity : ComponentActivity() {
 
     private val viewModel: BusViewModel by viewModels()
-    private val htmlContent = mutableStateOf("")
     private lateinit var mStopId: String;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +60,6 @@ class MainActivity : ComponentActivity() {
                 navController.navigate("notFound")
             } else {
                 this.viewModel.getBussTime(stopId).observe(this) {
-                    htmlContent.value = it
                     navController.navigate("busList")
                 }
             }
@@ -93,6 +90,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("busList") {
                         BusListScreen()
+                    }
+                    composable("busTracking") {
+                        //BusTrackingScreen()
                     }
                 }
             }
