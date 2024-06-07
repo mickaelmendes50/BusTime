@@ -50,12 +50,15 @@ android {
 
 dependencies {
 
+    // Wear Compose
+    implementation("androidx.wear.compose:compose-foundation:1.3.1")
+    implementation("androidx.wear.compose:compose-material:1.3.1")
+    implementation("androidx.wear.compose:compose-navigation:1.3.1")
+    implementation("androidx.wear.compose:compose-ui-tooling:1.3.1")
     implementation("com.google.android.gms:play-services-wearable:18.1.0")
     implementation(platform("androidx.compose:compose-bom:2024.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.wear.compose:compose-material:1.3.0")
-    implementation("androidx.wear.compose:compose-foundation:1.3.0")
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.wear.tiles:tiles-material:1.3.0")
@@ -63,7 +66,6 @@ dependencies {
     implementation("com.google.android.horologist:horologist-tiles:0.4.8")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.2.1")
-    implementation("androidx.wear.compose:compose-navigation:1.3.0")
     implementation("androidx.compose.material3:material3-android:1.2.1")
     implementation("androidx.wear:wear-input:1.2.0-alpha02")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
