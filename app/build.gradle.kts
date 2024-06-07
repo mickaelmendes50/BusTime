@@ -84,6 +84,7 @@ dependencies {
 
     // Google
     implementation("com.google.android.gms:play-services-wearable:18.2.0")
+    implementation("com.google.maps.android:maps-compose:5.0.3")
     implementation("com.google.code.gson:gson:2.11.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")

@@ -39,6 +39,10 @@
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD8Twfzd-pQaRXnO8v5_bWiycOz78VHSOo"/>
+
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
