@@ -21,4 +21,11 @@ interface Endpoints {
     suspend fun postBusTable(
         @Field("qryIdPontoParada") stopId: String
     ): Response<JsonObject>
+
+    @FormUrlEncoded
+    @POST("/pontoparada/previsaochegada")
+    suspend fun postBusLocation(
+        @Field("qryIdPontoParada") stopId: String,
+        @Field("qryIdVeiculo") busId: String
+    ): Response<JsonObject>
 }
