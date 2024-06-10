@@ -70,21 +70,31 @@ class BusViewModel : ViewModel() {
     private fun updateBusInfo(res: BusTableResponse) {
         val busList = ArrayList<Bus>()
         res.data.forEach {
+            val nextTime = if (it.Proximo.PrevisaoChegada != 0) {
+                it.Proximo.PrevisaoChegada.toString().padStart(2, '0')
+            } else {
+                "<1"
+            }
+            val followingTime = if (it.Proximo.PrevisaoChegada != 0) {
+                it.Seguinte?.PrevisaoChegada?.toString()?.padStart(2, '0') ?: "--"
+            } else {
+                "<1"
+            }
             val bus = Bus(
                 number = it.Linha,
                 destination = it.Destino,
                 next = ArrivalTime(
-                    time = it.Proximo.PrevisaoChegada.toString(),
+                    time = nextTime,
                     isReal = it.Proximo.Qualidade == "Tempo Real"
                 ),
-                if (it.Seguinte != null) {
+                following = if (it.Seguinte != null) {
                     ArrivalTime(
-                        time = it.Seguinte.PrevisaoChegada.toString(),
+                        time = followingTime,
                         isReal = it.Seguinte.Qualidade == "Tempo Real"
                     )
                 } else {
                     ArrivalTime(
-                        time = "--",
+                        time = " -- ",
                         isReal = null
                     )
                 }
