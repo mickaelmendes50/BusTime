@@ -70,16 +70,10 @@ class BusViewModel : ViewModel() {
     private fun updateBusInfo(res: BusTableResponse) {
         val busList = ArrayList<Bus>()
         res.data.forEach {
-            val nextTime = if (it.Proximo.PrevisaoChegada != 0) {
-                it.Proximo.PrevisaoChegada.toString().padStart(2, '0')
-            } else {
-                "<1"
-            }
-            val followingTime = if (it.Proximo.PrevisaoChegada != 0) {
-                it.Seguinte?.PrevisaoChegada?.toString()?.padStart(2, '0') ?: "--"
-            } else {
-                "<1"
-            }
+            val nextTime = if (it.Proximo.PrevisaoChegada == 0) "<1"
+                           else it.Proximo.PrevisaoChegada.toString().padStart(2, '0')
+            val followingTime = if (it.Seguinte?.PrevisaoChegada == 0) "<1"
+                                else it.Seguinte?.PrevisaoChegada?.toString()?.padStart(2, '0') ?: "--"
             val bus = Bus(
                 number = it.Linha,
                 destination = it.Destino,
@@ -94,8 +88,8 @@ class BusViewModel : ViewModel() {
                     )
                 } else {
                     ArrivalTime(
-                        time = " -- ",
-                        isReal = null
+                        time = "--",
+                        isReal = true
                     )
                 }
             )
