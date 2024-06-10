@@ -18,13 +18,14 @@ import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import co.mesquita.labs.bustime.R
+import co.mesquita.labs.bustime.data.ArrivalTime
 
 @Composable
 fun BusChip(
-    destiny: String,
-    busNumber: String,
-    nextTime: String,
-    anotherNext: String
+    destination: String,
+    number: String,
+    next: ArrivalTime,
+    following: ArrivalTime
 ) {
     Chip(
         modifier = Modifier.fillMaxWidth(),
@@ -37,7 +38,7 @@ fun BusChip(
                     textAlign = TextAlign.Center,
                     fontSize = 8.sp,
                     color = MaterialTheme.colors.onSurfaceVariant,
-                    text = destiny,
+                    text = destination,
                 )
                 Row(
                     modifier = Modifier
@@ -53,7 +54,7 @@ fun BusChip(
                             fontWeight = FontWeight.Bold,
                             fontSize = 17.sp,
                             color = MaterialTheme.colors.primary,
-                            text = busNumber,
+                            text = number
                         )
                         Text(
                             fontSize = 8.sp,
@@ -67,7 +68,7 @@ fun BusChip(
                         Text(
                             fontSize = 17.sp,
                             color = MaterialTheme.colors.onSurface,
-                            text = nextTime,
+                            text = next.time,
                         )
                         Text(
                             fontSize = 8.sp,
@@ -81,7 +82,7 @@ fun BusChip(
                         Text(
                             fontSize = 17.sp,
                             color = MaterialTheme.colors.secondary,
-                            text = anotherNext,
+                            text = following.time,
                         )
                         Text(
                             fontSize = 8.sp,

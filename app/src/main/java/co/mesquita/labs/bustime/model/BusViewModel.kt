@@ -6,30 +6,26 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.mesquita.labs.bustime.api.Endpoints
-import co.mesquita.labs.bustime.util.Constants.BASE_WEB_URL
+import co.mesquita.labs.bustime.data.ArrivalTime
+import co.mesquita.labs.bustime.data.Bus
+import co.mesquita.labs.bustime.data.response.BusTableResponse
 import co.mesquita.labs.bustime.util.NetworkUtils
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import retrofit2.HttpException
 
 class BusViewModel : ViewModel() {
     private val _isLoading = MutableLiveData(false)
-    private val _destinyList = MutableLiveData<List<String>>()
-    private val _busNumberList = MutableLiveData<List<String>>()
-    private val _nextTimeList = MutableLiveData<List<String>>()
-    private val _anotherNextList = MutableLiveData<List<String>>()
-
+    private val _busList = MutableLiveData<List<Bus>>()
     val isLoading: LiveData<Boolean> = _isLoading
-    val destinyList: LiveData<List<String>> get() = _destinyList
-    val busNumberList: LiveData<List<String>> get() = _busNumberList
-    val nextTimeList: LiveData<List<String>> get() = _nextTimeList
-    val anotherNextList: LiveData<List<String>> get() = _anotherNextList
+    val busList: LiveData<List<Bus>> = _busList
 
     fun isValidStopId(stopId: String): LiveData<Boolean> {
-        val resultLiveData = MutableLiveData<Boolean>()
-        val retrofitClient = NetworkUtils.getRetrofitInstance(BASE_WEB_URL)
+        val isValid = MutableLiveData<Boolean>()
+        val retrofitClient = NetworkUtils.getWebInstance("json")
         val service = retrofitClient.create(Endpoints::class.java)
         _isLoading.postValue(true)
 
@@ -38,73 +34,63 @@ class BusViewModel : ViewModel() {
                 val response = service.isStopIdValid(stopId)
                 if (response.isSuccessful) {
                     val status = response.body()?.get("status")?.asString
-                    resultLiveData.postValue(status == "sucesso")
+                    isValid.postValue(status == "sucesso")
                 }
             } catch (e: HttpException) {
                 Log.e("Retrofit", "Exception ${e.message}")
             }
             _isLoading.postValue(false)
         }
-        return resultLiveData
+        return isValid
     }
 
-    fun getBussTime(stopId: String): LiveData<String> {
-        val resultLiveData = MutableLiveData<String>()
-        val destinies = mutableListOf<String>()
-        val busNumbers = mutableListOf<String>()
-        val nextTimes = mutableListOf<String>()
-        val anotherNexts = mutableListOf<String>()
-        val retrofitClient = NetworkUtils.getRetrofitInstance(BASE_WEB_URL,"string")
+    fun updateBusTable(stopId: String) {
+        val retrofitClient = NetworkUtils.getAppInstance()
         val service = retrofitClient.create(Endpoints::class.java)
-        _isLoading.postValue(true)
-
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val response = service.getBusTime(stopId)
-                if (response.isSuccessful) {
-                    resultLiveData.postValue(response.body())
-                    val document: Document = Jsoup.parse(response.body())
-                    val timeTable = document.select("table.table-sm.table-striped.subtab-previsoes")
-                    for (line in timeTable.select("tr").drop(1)) {
-                        val columns = line.select("td")
-                        val busNumber = columns[0].text()
-                        val destiny = columns[1].text()
-                        val nextTimeElement = columns[2]
-                        val anotherNextElement = columns[3]
-
-                        val nextTime = if (nextTimeElement.text() != "--") {
-                            nextTimeElement.ownText().replace(Regex("[^\\d]+"), "")
-                                .replace("(Aprox.)", "?")
-                        } else {
-                            "--"
-                        }
-
-                        val anotherNext = if (anotherNextElement.text() != "--") {
-                            anotherNextElement.ownText().replace(Regex("[^\\d]+"), "")
-                                .replace("(Aprox.)", "?")
-                        } else {
-                            "--"
-                        }
-
-                        destinies.add(destiny)
-                        busNumbers.add(busNumber)
-                        nextTimes.add(nextTime)
-                        anotherNexts.add(anotherNext)
-                    }
+                val response = service.postBusTable(stopId)
+                val json = response.body()
+                if (json != null) {
+                    val busStopResponse = parseResponse(json)
+                    updateBusInfo(busStopResponse)
                 }
-            } catch (e: HttpException) {
+            } catch (e: Exception) {
                 Log.e("Retrofit", "Exception ${e.message}")
             }
-            _isLoading.postValue(false)
         }
-        updateBusInfo(destinies, busNumbers, nextTimes, anotherNexts)
-        return resultLiveData
     }
 
-    private fun updateBusInfo(destiny: List<String>, busNumber: List<String>, nextTime: List<String>, anotherNext: List<String>) {
-        _destinyList.value = destiny
-        _busNumberList.value = busNumber
-        _nextTimeList.value = nextTime
-        _anotherNextList.value = anotherNext
+    private fun parseResponse(json: JsonObject): BusTableResponse {
+        val gson = Gson()
+        val type = object : TypeToken<BusTableResponse>() {}.type
+        return gson.fromJson(json, type)
+    }
+
+    private fun updateBusInfo(res: BusTableResponse) {
+        val busList = ArrayList<Bus>()
+        res.data.forEach {
+            val bus = Bus(
+                number = it.Linha,
+                destination = it.Destino,
+                next = ArrivalTime(
+                    time = it.Proximo.PrevisaoChegada.toString(),
+                    isReal = it.Proximo.Qualidade == "Tempo Real"
+                ),
+                if (it.Seguinte != null) {
+                    ArrivalTime(
+                        time = it.Seguinte.PrevisaoChegada.toString(),
+                        isReal = it.Seguinte.Qualidade == "Tempo Real"
+                    )
+                } else {
+                    ArrivalTime(
+                        time = "--",
+                        isReal = null
+                    )
+                }
+            )
+            busList.add(bus)
+        }
+        _busList.postValue(busList)
     }
 }

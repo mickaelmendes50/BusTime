@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -59,9 +60,7 @@ class MainActivity : ComponentActivity() {
             if (!isValid) {
                 navController.navigate("notFound")
             } else {
-                this.viewModel.getBussTime(stopId).observe(this) {
-                    navController.navigate("busList")
-                }
+                navController.navigate("busList")
             }
         }
     }
@@ -103,10 +102,11 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun BusListScreen() {
         val columnState = rememberResponsiveColumnState()
-        val destinies by viewModel.destinyList.observeAsState(emptyList())
-        val busNumbers by viewModel.busNumberList.observeAsState(emptyList())
-        val nextTimes by viewModel.nextTimeList.observeAsState(emptyList())
-        val anotherNexts by viewModel.anotherNextList.observeAsState(emptyList())
+        val busList by viewModel.busList.observeAsState(emptyList())
+
+        LaunchedEffect(mStopId) {
+            viewModel.updateBusTable(mStopId)
+        }
 
         ScreenScaffold(scrollState = columnState) {
             ScalingLazyColumn(
@@ -128,12 +128,12 @@ class MainActivity : ComponentActivity() {
                 }
 
                 // Create a BusChip for each bus info
-                items(destinies.size) { index ->
+                items(busList.size) { i ->
                     BusChip(
-                        destiny = destinies[index],
-                        busNumber = busNumbers[index],
-                        nextTime = nextTimes[index],
-                        anotherNext = anotherNexts[index]
+                        destination = busList[i].destination,
+                        number = busList[i].number,
+                        next = busList[i].next,
+                        following = busList[i].following
                     )
                 }
             }
