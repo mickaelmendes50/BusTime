@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
+import androidx.wear.compose.material.Chip
+import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
@@ -36,6 +38,7 @@ import com.google.android.horologist.compose.layout.AppScaffold
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
 import com.google.android.horologist.compose.layout.ScreenScaffold
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import com.valentinilk.shimmer.shimmer
 
 class MainActivity : ComponentActivity() {
 
@@ -103,6 +106,7 @@ class MainActivity : ComponentActivity() {
     fun BusListScreen() {
         val columnState = rememberResponsiveColumnState()
         val busList by viewModel.busList.observeAsState(emptyList())
+        val isLoading by viewModel.isLoading.observeAsState(true)
 
         LaunchedEffect(mStopId) {
             viewModel.updateBusTable(mStopId)
@@ -125,6 +129,28 @@ class MainActivity : ComponentActivity() {
                         color = MaterialTheme.colors.primary,
                         text = stringResource(R.string.table_title, mStopId)
                     )
+                }
+
+                if(isLoading) {
+                    items(3) {i ->
+                        Chip(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shimmer(),
+                            label = {
+                                Text(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 8.dp),
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 8.sp,
+                                    color = MaterialTheme.colors.onSurfaceVariant,
+                                    text = "",
+                                )
+                            },
+                            onClick = { /*TODO*/ }
+                        )
+                    }
                 }
 
                 // Create a BusChip for each bus info

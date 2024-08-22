@@ -19,6 +19,7 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.data.ArrivalTime
+import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun BusChip(

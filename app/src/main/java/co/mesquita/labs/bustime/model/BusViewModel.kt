@@ -47,6 +47,7 @@ class BusViewModel : ViewModel() {
     fun updateBusTable(stopId: String) {
         val retrofitClient = NetworkUtils.getAppInstance()
         val service = retrofitClient.create(Endpoints::class.java)
+        _isLoading.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = service.postBusTable(stopId)
@@ -58,6 +59,7 @@ class BusViewModel : ViewModel() {
             } catch (e: Exception) {
                 Log.e("Retrofit", "Exception ${e.message}")
             }
+            _isLoading.postValue(false)
         }
     }
 

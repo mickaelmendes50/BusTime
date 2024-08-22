@@ -71,6 +71,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.9.0")
     implementation("androidx.compose.ui:ui-tooling-preview:1.6.7")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.7")
+    implementation("com.valentinilk.shimmer:compose-shimmer:1.3.0")
 
     // Wear
     implementation("androidx.wear:wear-input:1.2.0-alpha02")
