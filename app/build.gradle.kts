@@ -87,12 +87,12 @@ dependencies {
     implementation("com.google.code.gson:gson:2.11.0")
 
     // Android
-    implementation("org.jsoup:jsoup:1.17.2")
-    implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    implementation("org.jsoup:jsoup:1.22.1")
+    implementation("androidx.core:core-splashscreen:1.2.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
