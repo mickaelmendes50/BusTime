@@ -48,32 +48,32 @@ android {
 
 dependencies {
     // Wear Compose
-    implementation("androidx.wear.compose:compose-foundation:1.4.0-beta02")
-    implementation("androidx.wear.compose:compose-material:1.4.0-beta02")
-    implementation("androidx.wear.compose:compose-navigation:1.4.0-beta02")
-    implementation("androidx.wear.compose:compose-ui-tooling:1.4.0-beta02")
+    implementation("androidx.wear.compose:compose-foundation:1.5.6")
+    implementation("androidx.wear.compose:compose-material:1.5.6")
+    implementation("androidx.wear.compose:compose-navigation:1.5.6")
+    implementation("androidx.wear.compose:compose-ui-tooling:1.5.6")
 
     // Horologist Compose
-    implementation("com.google.android.horologist:horologist-compose-tools:0.6.13")
-    implementation("com.google.android.horologist:horologist-tiles:0.6.13")
-    implementation("com.google.android.horologist:horologist-compose-material:0.6.13")
-    runtimeOnly("com.google.android.horologist:horologist-compose-layout:0.6.13")
-    runtimeOnly("com.google.android.horologist:horologist-compose-material:0.6.13")
+    implementation("com.google.android.horologist:horologist-compose-tools:0.7.15")
+    implementation("com.google.android.horologist:horologist-tiles:0.7.15")
+    implementation("com.google.android.horologist:horologist-compose-material:0.7.15")
+    runtimeOnly("com.google.android.horologist:horologist-compose-layout:0.7.15")
+    runtimeOnly("com.google.android.horologist:horologist-compose-material:0.7.15")
 
     // Material Compose Icons
-    implementation("androidx.compose.material:material-icons-core:1.7.0-alpha05")
-    implementation("androidx.compose.material:material-icons-extended:1.7.0-alpha05")
+    implementation("androidx.compose.material:material-icons-core:1.7.8")
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
 
     // Compose
-    implementation(platform("androidx.compose:compose-bom:2024.05.00"))
-    implementation("androidx.activity:activity-compose:1.9.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.6.7")
-    implementation("androidx.compose.runtime:runtime-livedata:1.6.7")
-    implementation("com.valentinilk.shimmer:compose-shimmer:1.3.0")
+    implementation(platform("androidx.compose:compose-bom:2026.02.00"))
+    implementation("androidx.activity:activity-compose:1.12.4")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.10.3")
+    implementation("androidx.compose.runtime:runtime-livedata:1.10.3")
+    implementation("com.valentinilk.shimmer:compose-shimmer:1.3.3")
 
     // Wear
-    implementation("androidx.wear:wear-input:1.2.0-alpha02")
-    implementation("androidx.wear.tiles:tiles-material:1.3.0")
+    implementation("androidx.wear:wear-input:1.2.0")
+    implementation("androidx.wear.tiles:tiles-material:1.5.0")
     implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.2.1")
 
     // Retrofit
