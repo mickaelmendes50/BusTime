@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.wear.compose.material.Chip
-import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
@@ -29,7 +28,7 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.components.BusChip
 import co.mesquita.labs.bustime.model.BusViewModel
-import co.mesquita.labs.bustime.presentation.theme.BusTimeGoianiaTheme
+import co.mesquita.labs.bustime.presentation.theme.BusTimeTheme
 import co.mesquita.labs.bustime.presentation.theme.HomeScreen
 import co.mesquita.labs.bustime.presentation.theme.NotFoundScreen
 import co.mesquita.labs.bustime.presentation.theme.SearchScreen
@@ -50,10 +49,10 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        setTheme(android.R.style.Theme_DeviceDefault)
-
         setContent {
-            WearApp()
+            BusTimeTheme {
+                WearApp()
+            }
         }
     }
 
@@ -70,32 +69,29 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun WearApp() {
-        val navController = rememberSwipeDismissableNavController()
-
-        BusTimeGoianiaTheme {
-            AppScaffold {
-                SwipeDismissableNavHost(
-                    navController = navController,
-                    startDestination = "home"
-                ) {
-                    composable("home") {
-                        HomeScreen(navController)
+        AppScaffold {
+            val navController = rememberSwipeDismissableNavController()
+            SwipeDismissableNavHost(
+                navController = navController,
+                startDestination = "home"
+            ) {
+                composable("home") {
+                    HomeScreen(navController)
+                }
+                composable("search") {
+                    val isLoading by viewModel.isLoading.observeAsState()
+                    SearchScreen(isLoading, navController) { navController, stopId ->
+                        onSearchButtonClick(navController, stopId)
                     }
-                    composable("search") {
-                        val isLoading by viewModel.isLoading.observeAsState()
-                        SearchScreen(isLoading, navController) { navController, stopId ->
-                            onSearchButtonClick(navController, stopId)
-                        }
-                    }
-                    composable("notFound") {
-                        NotFoundScreen()
-                    }
-                    composable("busList") {
-                        BusListScreen()
-                    }
-                    composable("busTracking") {
-                        //BusTrackingScreen()
-                    }
+                }
+                composable("notFound") {
+                    NotFoundScreen()
+                }
+                composable("busList") {
+                    BusListScreen()
+                }
+                composable("busTracking") {
+                    //BusTrackingScreen()
                 }
             }
         }
