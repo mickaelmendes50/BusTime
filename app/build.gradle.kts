@@ -77,14 +77,14 @@ dependencies {
     implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.2.1")
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
-    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    implementation("com.squareup.retrofit2:converter-scalars:3.0.0")
 
     // Google
-    implementation("com.google.android.gms:play-services-wearable:18.2.0")
-    implementation("com.google.maps.android:maps-compose:5.0.3")
-    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.google.android.gms:play-services-wearable:19.0.0")
+    implementation("com.google.maps.android:maps-compose:8.1.0")
+    implementation("com.google.code.gson:gson:2.13.2")
 
     // Android
     implementation("org.jsoup:jsoup:1.22.1")
