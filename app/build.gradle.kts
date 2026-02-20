@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "co.mesquita.labs.bustime"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "co.mesquita.labs.bustime"
