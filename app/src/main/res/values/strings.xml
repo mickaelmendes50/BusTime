@@ -15,6 +15,7 @@
 
     <!--  Empty table  -->
     <string name="empty_table">Ponto não encontrado</string>
+    <string name="empty_bus_list">Não há ônibus próximos</string>
 
     <!--  Bus time table  -->
     <string name="table_title">Ponto %s</string>

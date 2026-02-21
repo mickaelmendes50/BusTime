@@ -85,7 +85,7 @@ fun BusListScreen(
 
         // if loading done but empty show empty fragment
         else if (busList.isEmpty()) item {
-            EmptyFragment("Não há ônibus próximos")
+            EmptyFragment(stringResource(R.string.empty_bus_list))
         }
 
         // show the BusChip for each bus info
