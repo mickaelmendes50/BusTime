@@ -52,13 +52,7 @@ dependencies {
     implementation("androidx.wear.compose:compose-material:1.5.6")
     implementation("androidx.wear.compose:compose-navigation:1.5.6")
     implementation("androidx.wear.compose:compose-ui-tooling:1.5.6")
-
-    // Horologist Compose
-    implementation("com.google.android.horologist:horologist-compose-tools:0.7.15")
-    implementation("com.google.android.horologist:horologist-tiles:0.7.15")
-    implementation("com.google.android.horologist:horologist-compose-material:0.7.15")
-    runtimeOnly("com.google.android.horologist:horologist-compose-layout:0.7.15")
-    runtimeOnly("com.google.android.horologist:horologist-compose-material:0.7.15")
+    implementation("androidx.wear.compose:compose-material3:1.5.6")
 
     // Material Compose Icons
     implementation("androidx.compose.material:material-icons-core:1.7.8")

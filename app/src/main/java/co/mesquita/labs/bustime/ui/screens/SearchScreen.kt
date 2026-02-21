@@ -29,7 +29,6 @@ import androidx.wear.compose.material.Text
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.ui.components.RoundTextField
 import co.mesquita.labs.bustime.model.BusViewModel
-import com.google.android.horologist.compose.layout.fillMaxRectangle
 
 @Composable
 fun SearchScreen(
@@ -57,7 +56,7 @@ fun SearchScreen(
 
     Box(
         modifier = Modifier
-            .fillMaxRectangle()
+            .fillMaxSize()
     ) {
         Column(
             modifier = Modifier

@@ -15,27 +15,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import co.mesquita.labs.bustime.R
-import co.mesquita.labs.bustime.ui.components.BusChip
 import co.mesquita.labs.bustime.model.BusViewModel
-import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.layout.ScalingLazyColumn
-import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
+import co.mesquita.labs.bustime.ui.components.BusChip
 import com.valentinilk.shimmer.shimmer
 
-@OptIn(ExperimentalHorologistApi::class)
 @Composable
 fun BusListScreen(
     stopId: Int,
     navController: NavController,
     viewModel: BusViewModel = viewModel()
 ) {
-    val columnState = rememberResponsiveColumnState()
+    val columnState = rememberScalingLazyListState()
     val busList by viewModel.busList.observeAsState(emptyList())
     val isLoading by viewModel.isLoading.observeAsState(true)
+
+    LaunchedEffect(Unit) {
+        columnState.animateScrollToItem(0)
+    }
 
     LaunchedEffect(stopId) {
         viewModel.updateBusTable(stopId)
@@ -44,7 +46,7 @@ fun BusListScreen(
     ScalingLazyColumn(
         modifier = Modifier
             .fillMaxSize(),
-        columnState = columnState
+        state = columnState
     ) {
         item {
             Text(

@@ -15,7 +15,8 @@ import co.mesquita.labs.bustime.ui.screens.NotFoundScreen
 fun AppNavigation(navController: NavHostController) {
     SwipeDismissableNavHost(
         navController = navController,
-        startDestination = "home"
+        startDestination = "home",
+        userSwipeEnabled = true
     ) {
         composable("home") {
             HomeScreen(navController)
