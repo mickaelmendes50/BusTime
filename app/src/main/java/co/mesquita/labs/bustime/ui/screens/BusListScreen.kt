@@ -33,6 +33,7 @@ fun BusListScreen(
 ) {
     val columnState = rememberScalingLazyListState()
     val busList by viewModel.busList.observeAsState(emptyList())
+    val isLoading by viewModel.isLoading.observeAsState(false)
 
     LaunchedEffect(Unit) {
         columnState.animateScrollToItem(0)
@@ -60,7 +61,7 @@ fun BusListScreen(
             )
         }
 
-        if (busList.isEmpty())
+        if (isLoading)
             items(3, key = { "shimmer-$it" }) {
                 Chip(
                     modifier = Modifier
