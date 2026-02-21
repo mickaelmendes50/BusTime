@@ -23,6 +23,7 @@ import androidx.wear.compose.material.Text
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.ui.components.BusChip
+import co.mesquita.labs.bustime.ui.components.EmptyFragment
 import com.valentinilk.shimmer.shimmer
 
 @Composable
@@ -61,29 +62,34 @@ fun BusListScreen(
             )
         }
 
-        if (isLoading)
-            items(3, key = { "shimmer-$it" }) {
-                Chip(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shimmer(),
-                    label = {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 8.dp),
-                            textAlign = TextAlign.Center,
-                            fontSize = 8.sp,
-                            color = MaterialTheme.colors.onSurfaceVariant,
-                            text = "",
-                        )
-                    },
-                    onClick = { /* do nothing */ }
-                )
-            }
+        // if loading show shimmer
+        if (isLoading) items(3, key = { "shimmer-$it" }) {
+            Chip(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shimmer(),
+                label = {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
+                        textAlign = TextAlign.Center,
+                        fontSize = 8.sp,
+                        color = MaterialTheme.colors.onSurfaceVariant,
+                        text = "",
+                    )
+                },
+                onClick = { /* do nothing */ }
+            )
+        }
 
-        // Create a BusChip for each bus info
-        items(busList.size) { i ->
+        // if loading done but empty show empty fragment
+        else if (busList.isEmpty()) item {
+            EmptyFragment("Não há ônibus próximos")
+        }
+
+        // show the BusChip for each bus info
+        else items(busList.size) { i ->
             BusChip(
                 destination = busList[i].destination,
                 number = busList[i].number,
