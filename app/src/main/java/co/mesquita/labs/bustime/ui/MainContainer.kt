@@ -1,8 +1,8 @@
-package co.mesquita.labs.bustime.presentation
+package co.mesquita.labs.bustime.ui
 
 import androidx.compose.runtime.Composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
-import co.mesquita.labs.bustime.presentation.nav.AppNavigation
+import co.mesquita.labs.bustime.ui.nav.AppNavigation
 import com.google.android.horologist.compose.layout.AppScaffold
 
 @Composable

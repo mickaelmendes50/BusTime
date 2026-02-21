@@ -1,4 +1,4 @@
-package co.mesquita.labs.bustime.presentation.nav
+package co.mesquita.labs.bustime.ui.nav
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -6,10 +6,10 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
-import co.mesquita.labs.bustime.presentation.screens.BusListScreen
-import co.mesquita.labs.bustime.presentation.screens.HomeScreen
-import co.mesquita.labs.bustime.presentation.screens.SearchScreen
-import co.mesquita.labs.bustime.presentation.screens.NotFoundScreen
+import co.mesquita.labs.bustime.ui.screens.BusListScreen
+import co.mesquita.labs.bustime.ui.screens.HomeScreen
+import co.mesquita.labs.bustime.ui.screens.SearchScreen
+import co.mesquita.labs.bustime.ui.screens.NotFoundScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController) {

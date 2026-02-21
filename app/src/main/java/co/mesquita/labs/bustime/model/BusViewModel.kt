@@ -19,38 +19,45 @@ import retrofit2.HttpException
 
 class BusViewModel : ViewModel() {
     private val _isLoading = MutableLiveData(false)
-    private val _busList = MutableLiveData<List<Bus>>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _isValidStopId = MutableLiveData<Boolean?>(null)
+    val isValidStopId: LiveData<Boolean?> = _isValidStopId
+
+    private val _busList = MutableLiveData<List<Bus>>()
     val busList: LiveData<List<Bus>> = _busList
 
-    fun isValidStopId(stopId: String): LiveData<Boolean> {
-        val isValid = MutableLiveData<Boolean>()
+    fun resetValidation() {
+        _isValidStopId.value = null
+        _isLoading.value = false
+    }
+
+    fun validateStopId(stopId: Int) {
         val retrofitClient = NetworkUtils.getWebInstance("json")
         val service = retrofitClient.create(Endpoints::class.java)
         _isLoading.postValue(true)
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val response = service.isStopIdValid(stopId)
+                val response = service.isStopIdValid(stopId.toString())
                 if (response.isSuccessful) {
                     val status = response.body()?.get("status")?.asString
-                    isValid.postValue(status == "sucesso")
+                    _isValidStopId.postValue(status == "sucesso")
                 }
             } catch (e: HttpException) {
                 Log.e("Retrofit", "Exception ${e.message}")
             }
             _isLoading.postValue(false)
         }
-        return isValid
     }
 
-    fun updateBusTable(stopId: String) {
+    fun updateBusTable(stopId: Int) {
         val retrofitClient = NetworkUtils.getAppInstance()
         val service = retrofitClient.create(Endpoints::class.java)
         _isLoading.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val response = service.postBusTable(stopId)
+                val response = service.postBusTable(stopId.toString())
                 val json = response.body()
                 if (json != null) {
                     val busStopResponse = parseResponse(json)
