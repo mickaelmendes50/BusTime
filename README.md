@@ -1,4 +1,6 @@
 # BusTime Goiânia
+[![Download](https://img.shields.io/badge/releases-latest-green)](https://github.com/mickaelmendes50/BusTime/releases)
+
 Wear OS app para consulta de horários de ônibus em Goiânia - GO.
 
 ## ✨ Funcionalidades
@@ -26,4 +28,4 @@ Wear OS app para consulta de horários de ônibus em Goiânia - GO.
 
 ## 📍 Sobre
 
-Horários via API oficial de transporte público. Goiânia - GO |
+Horários via API oficial de transporte público. Goiânia - GO
