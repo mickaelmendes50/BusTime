@@ -23,6 +23,7 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.ui.components.SearchButton
+import co.mesquita.labs.bustime.ui.nav.NavigationRoutes
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -57,7 +58,7 @@ fun HomeScreen(navController: NavController) {
                 text = stringResource(R.string.subtitle)
             )
 
-            SearchButton(onClick = { navController.navigate("search") })
+            SearchButton(onClick = { navController.navigate(NavigationRoutes.SEARCH_SCREEN.route) })
         }
     }
 }

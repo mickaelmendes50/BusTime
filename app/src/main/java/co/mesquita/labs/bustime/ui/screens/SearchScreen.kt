@@ -29,6 +29,7 @@ import androidx.wear.compose.material.Text
 import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.ui.components.RoundTextField
 import co.mesquita.labs.bustime.model.BusViewModel
+import co.mesquita.labs.bustime.ui.nav.NavigationRoutes
 
 @Composable
 fun SearchScreen(
@@ -43,11 +44,11 @@ fun SearchScreen(
     LaunchedEffect(isValidStopId) {
         when (isValidStopId) {
             true  -> {
-                navController.navigate("bus-list?stopId=$stopId")
+                navController.navigate("${NavigationRoutes.BUS_LIST_SCREEN.route}?stopId=$stopId")
                 viewModel.resetValidation()
             }
             false -> {
-                navController.navigate("not-found")
+                navController.navigate(NavigationRoutes.NOT_FOUND_SCREEN.route)
                 viewModel.resetValidation()
             }
             else  -> Unit

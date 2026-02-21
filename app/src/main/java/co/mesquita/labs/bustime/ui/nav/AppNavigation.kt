@@ -8,27 +8,27 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import co.mesquita.labs.bustime.ui.screens.BusListScreen
 import co.mesquita.labs.bustime.ui.screens.HomeScreen
-import co.mesquita.labs.bustime.ui.screens.SearchScreen
 import co.mesquita.labs.bustime.ui.screens.NotFoundScreen
+import co.mesquita.labs.bustime.ui.screens.SearchScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
     SwipeDismissableNavHost(
         navController = navController,
-        startDestination = "home",
+        startDestination = NavigationRoutes.HOME_SCREEN.route,
         userSwipeEnabled = true
     ) {
-        composable("home") {
+        composable(NavigationRoutes.HOME_SCREEN.route) {
             HomeScreen(navController)
         }
-        composable("search") {
+        composable(NavigationRoutes.SEARCH_SCREEN.route) {
             SearchScreen(navController)
         }
-        composable("not-found") {
+        composable(NavigationRoutes.NOT_FOUND_SCREEN.route) {
             NotFoundScreen()
         }
         composable(
-            route = "bus-list?stopId={stopId}",
+            route = "${NavigationRoutes.BUS_LIST_SCREEN.route}?stopId={stopId}",
             arguments = listOf(
                 navArgument("stopId") {
                     type = NavType.IntType
@@ -39,7 +39,7 @@ fun AppNavigation(navController: NavHostController) {
             val stopId = backStackEntry.arguments?.getInt("stopId") ?: 0
             BusListScreen(navController = navController, stopId = stopId)
         }
-        composable("bus-tracking") {
+        composable(NavigationRoutes.BUS_TRACKING_SCREEN.route) {
             //BusTrackingScreen()
         }
     }
