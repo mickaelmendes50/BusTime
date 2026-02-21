@@ -33,7 +33,6 @@ fun BusListScreen(
 ) {
     val columnState = rememberScalingLazyListState()
     val busList by viewModel.busList.observeAsState(emptyList())
-    val isLoading by viewModel.isLoading.observeAsState(true)
 
     LaunchedEffect(Unit) {
         columnState.animateScrollToItem(0)
@@ -48,7 +47,7 @@ fun BusListScreen(
             .fillMaxSize(),
         state = columnState
     ) {
-        item {
+        item(key = "title") {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -61,8 +60,8 @@ fun BusListScreen(
             )
         }
 
-        if (isLoading)
-            items(3) {
+        if (busList.isEmpty())
+            items(3, key = { "shimmer-$it" }) {
                 Chip(
                     modifier = Modifier
                         .fillMaxWidth()
