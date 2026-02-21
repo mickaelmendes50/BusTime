@@ -59,6 +59,6 @@ fun RoundTextField(
             focusManager.clearFocus()
             if (input.isNotEmpty()) onDone(input)
         }),
-        modifier = Modifier.padding(24.dp)
+        modifier = Modifier.padding(horizontal = 24.dp)
     )
 }
