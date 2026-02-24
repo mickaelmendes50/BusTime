@@ -22,4 +22,5 @@
     <string name="table_line">LINHA</string>
     <string name="table_next">PRÓX.</string>
     <string name="table_another_next">SEG.</string>
+    <string name="refresh">Atualizar</string>
 </resources>

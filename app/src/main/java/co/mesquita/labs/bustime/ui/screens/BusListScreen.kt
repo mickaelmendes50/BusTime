@@ -1,12 +1,21 @@
 package co.mesquita.labs.bustime.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -18,6 +27,8 @@ import androidx.navigation.NavController
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.Chip
+import androidx.wear.compose.material.ChipDefaults
+import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import co.mesquita.labs.bustime.R
@@ -25,6 +36,7 @@ import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.ui.components.BusChip
 import co.mesquita.labs.bustime.ui.components.EmptyFragment
 import com.valentinilk.shimmer.shimmer
+import kotlinx.coroutines.launch
 
 @Composable
 fun BusListScreen(
@@ -33,6 +45,8 @@ fun BusListScreen(
     viewModel: BusViewModel = viewModel()
 ) {
     val columnState = rememberScalingLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
     val busList by viewModel.busList.observeAsState(emptyList())
     val isLoading by viewModel.isLoading.observeAsState(false)
 
@@ -96,6 +110,41 @@ fun BusListScreen(
                 next = busList[i].next,
                 following = busList[i].following,
                 onClick = { /* navController.navigate("bus-tracking") */ }
+            )
+        }
+
+        item(key = "refresh") {
+            Chip(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, bottom = 16.dp),
+                onClick = {
+                    viewModel.updateBusTable(stopId)
+                    coroutineScope.launch {
+                        columnState.animateScrollToItem(0)
+                    }
+                },
+                label = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Refresh,
+                            contentDescription = "Update",
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = stringResource(R.string.refresh),
+                            fontSize = 12.sp
+                        )
+                    }
+                },
+                enabled = !isLoading,
+                colors = ChipDefaults.chipColors(
+                    backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.1f)
+                )
             )
         }
     }
