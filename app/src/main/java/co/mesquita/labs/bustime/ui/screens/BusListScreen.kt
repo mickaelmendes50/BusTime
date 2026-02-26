@@ -36,7 +36,7 @@ import co.mesquita.labs.bustime.R
 import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.ui.components.BusChip
 import co.mesquita.labs.bustime.ui.components.EmptyFragment
-import com.valentinilk.shimmer.shimmer
+import co.mesquita.labs.bustime.ui.components.ShimmerChip
 import kotlinx.coroutines.launch
 
 @Composable
@@ -84,23 +84,7 @@ fun BusListScreen(
 
         // if loading show shimmer
         if (busList.isEmpty() && isLoading) items(3, key = { "shimmer-$it" }) {
-            Chip(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shimmer(),
-                label = {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp),
-                        textAlign = TextAlign.Center,
-                        fontSize = 8.sp,
-                        color = MaterialTheme.colors.onSurfaceVariant,
-                        text = "",
-                    )
-                },
-                onClick = { /* do nothing */ }
-            )
+            ShimmerChip()
         }
 
         // if loading done but empty show empty fragment
