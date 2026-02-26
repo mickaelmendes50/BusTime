@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -50,6 +51,11 @@ fun BusListScreen(
     val busList by viewModel.busList.observeAsState(emptyList())
     val isLoading by viewModel.isLoading.observeAsState(false)
 
+    LifecycleResumeEffect(stopId) {
+        viewModel.updateBusTable(stopId)
+        onPauseOrDispose { }
+    }
+
     LaunchedEffect(Unit) {
         columnState.animateScrollToItem(0)
     }
@@ -77,7 +83,7 @@ fun BusListScreen(
         }
 
         // if loading show shimmer
-        if (isLoading) items(3, key = { "shimmer-$it" }) {
+        if (busList.isEmpty() && isLoading) items(3, key = { "shimmer-$it" }) {
             Chip(
                 modifier = Modifier
                     .fillMaxWidth()
