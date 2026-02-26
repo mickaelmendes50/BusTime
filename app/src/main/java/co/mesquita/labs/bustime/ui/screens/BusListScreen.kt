@@ -37,6 +37,7 @@ import co.mesquita.labs.bustime.model.BusViewModel
 import co.mesquita.labs.bustime.ui.components.BusChip
 import co.mesquita.labs.bustime.ui.components.EmptyFragment
 import co.mesquita.labs.bustime.ui.components.ShimmerChip
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,12 +57,16 @@ fun BusListScreen(
         onPauseOrDispose { }
     }
 
-    LaunchedEffect(Unit) {
-        columnState.animateScrollToItem(0)
-    }
-
     LaunchedEffect(stopId) {
         viewModel.updateBusTable(stopId)
+        while (true) {
+            delay(30_000L)
+            viewModel.updateBusTable(stopId)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        columnState.animateScrollToItem(0)
     }
 
     ScalingLazyColumn(
