@@ -109,6 +109,7 @@ fun BusListScreen(
                     .fillMaxWidth()
                     .padding(top = 8.dp, bottom = 16.dp),
                 onClick = {
+                    viewModel.resetBusList()
                     viewModel.updateBusTable(stopId)
                     coroutineScope.launch {
                         columnState.animateScrollToItem(0)

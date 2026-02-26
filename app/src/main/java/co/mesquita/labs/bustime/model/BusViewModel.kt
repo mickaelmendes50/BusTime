@@ -32,6 +32,10 @@ class BusViewModel : ViewModel() {
         _isLoading.value = false
     }
 
+    fun resetBusList() {
+        _busList.value = emptyList()
+    }
+
     fun validateStopId(stopId: Int) {
         val retrofitClient = NetworkUtils.getWebInstance("json")
         val service = retrofitClient.create(Endpoints::class.java)
