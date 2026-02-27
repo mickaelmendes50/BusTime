@@ -70,6 +70,9 @@ dependencies {
     implementation("androidx.wear.tiles:tiles-material:1.5.0")
     implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.2.1")
 
+    // Horologist
+    implementation("com.google.android.horologist:horologist-compose-layout:0.7.15")
+
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")

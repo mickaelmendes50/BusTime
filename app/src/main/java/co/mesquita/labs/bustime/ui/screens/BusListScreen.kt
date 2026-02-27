@@ -43,6 +43,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun BusListScreen(
     stopId: Int,
+    isAmbient: Boolean,
     navController: NavController,
     viewModel: BusViewModel = viewModel()
 ) {

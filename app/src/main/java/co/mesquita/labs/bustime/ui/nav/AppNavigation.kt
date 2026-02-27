@@ -12,7 +12,10 @@ import co.mesquita.labs.bustime.ui.screens.NotFoundScreen
 import co.mesquita.labs.bustime.ui.screens.SearchScreen
 
 @Composable
-fun AppNavigation(navController: NavHostController) {
+fun AppNavigation(
+    navController: NavHostController,
+    isAmbient: Boolean
+) {
     SwipeDismissableNavHost(
         navController = navController,
         startDestination = NavigationRoutes.HOME_SCREEN.route,
@@ -37,7 +40,11 @@ fun AppNavigation(navController: NavHostController) {
             )
         ) { backStackEntry ->
             val stopId = backStackEntry.arguments?.getInt("stopId") ?: 0
-            BusListScreen(navController = navController, stopId = stopId)
+            BusListScreen(
+                stopId = stopId,
+                isAmbient = isAmbient,
+                navController = navController
+            )
         }
         composable(NavigationRoutes.BUS_TRACKING_SCREEN.route) {
             //BusTrackingScreen()
