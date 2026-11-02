@@ -78,7 +78,12 @@ fun SearchScreen(
                     stopId = newValue
                 },
                 onDone = { text ->
-                    viewModel.validateStopId(text.toInt())
+                    val parsedId = text.toIntOrNull()
+                    if (parsedId != null && parsedId > 0) {
+                        viewModel.validateStopId(parsedId)
+                    } else {
+                        navController.navigate(NavigationRoutes.NOT_FOUND_SCREEN.route)
+                    }
                 }
             )
             if (isLoading) {

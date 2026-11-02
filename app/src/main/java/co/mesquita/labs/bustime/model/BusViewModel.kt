@@ -14,6 +14,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -47,11 +48,16 @@ class BusViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     val status = response.body()?.get("status")?.asString
                     _isValidStopId.postValue(status == "sucesso")
+                } else {
+                    _isValidStopId.postValue(false)
                 }
-            } catch (e: HttpException) {
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
                 Log.e("Retrofit", "Exception ${e.message}")
+                _isValidStopId.postValue(false)
+            } finally {
+                _isLoading.postValue(false)
             }
-            _isLoading.postValue(false)
         }
     }
 
